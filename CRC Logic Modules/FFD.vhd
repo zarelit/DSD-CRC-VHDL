@@ -1,52 +1,57 @@
 -------------------------------------------------------------------------------
 --
--- Title       : CRC_logic
+-- Title       : ffd
 -- Design      : CRCmd
 -- Author      : Giuliano
 -- Company     : La mia
 --
 -------------------------------------------------------------------------------
 --
--- File        : CRC_Logic.vhd
--- Generated   : Wed Dec 19 10:24:09 2012
+-- File        : FFtipoD.vhd
+-- Generated   : Tue Dec 18 12:45:56 2012
 -- From        : interface description file
 -- By          : Itf2Vhdl ver. 1.22
 --
 -------------------------------------------------------------------------------
 --
--- Description : This file defines a generic CRC calculator based on N flip flop
--- of type d. It accept a polinomial and creates the correct structure in order
--- to compute the CRC.
+-- Description : implementazione di un flip flop di tipo D
 --
 -------------------------------------------------------------------------------
 
 --{{ Section below this comment is automatically maintained
 --   and may be overwritten
---{entity {CRC_logic} architecture {str_CRC}}
+--{entity {ffd} architecture {ffd_behave}}
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
-entity CRC_logic is
-	generic(
-	-- because it doesn't exist a polinomial of order < 1
-		POLINOMIAL_ORDER : positive;
-		POLINOMIAL : std_logic_vector(POLINOMIAL_ORDER-1 downto 0)
-	);
+entity ffd is
 	 port(
 		 D : in STD_LOGIC;
-		 CLOCK : in STD_LOGIC;
-		 RESET : in STD_LOGIC;
-		 ENABLE : in STD_LOGIC;
-		 Q : out STD_LOGIC
+		 Q : out STD_LOGIC;
+		 Qb : out STD_LOGIC;
+		 Clock : in std_logic;
+		 Reset : in std_logic
 	     );
-end CRC_logic;
+end ffd;
 
 --}} End of automatically maintained section
 
-architecture str_CRC of CRC_logic is
+-- robust version of the DFF, it set to 0 the input if RESET='0'. This avoids
+-- the undefined behaviour of the output at beginning of the simulation.
+architecture ffd_behave of ffd is
 begin
-
+	
+	works : process (Clock)
+	begin
+		if Reset = '0' then
+			Q <= '0';	
+		-- rising edge of the clock
+		elsif (Clock'event and Clock = '1') then
+			Q <= D;
+		end if;
+		Qb <= not Q;
+	end process;
 	 -- enter your statements here --
 
-end str_CRC;
+end ffd_behave;
