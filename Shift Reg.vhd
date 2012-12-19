@@ -1,46 +1,45 @@
 -------------------------------------------------------------------------------
 --
--- Title       : crc_module
+-- Title       : shift_reg
 -- Design      : CRCmd
 -- Author      : Giuliano
 -- Company     : La mia
 --
 -------------------------------------------------------------------------------
 --
--- File        : crc_def.vhd
--- Generated   : Tue Dec 18 09:29:41 2012
+-- File        : Shift Reg.vhd
+-- Generated   : Wed Dec 19 09:38:19 2012
 -- From        : interface description file
 -- By          : Itf2Vhdl ver. 1.22
 --
 -------------------------------------------------------------------------------
 --
--- Description : It defines the entity and the different architecture for a
--- CRC hardware module.
+-- Description : 
 --
 -------------------------------------------------------------------------------
 
 --{{ Section below this comment is automatically maintained
 --   and may be overwritten
---{entity {crc_module} architecture {simplest_arch}}
+--{entity {shift_reg} architecture {str_shift_reg}}
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
-entity crc_module is
+entity shift_reg is
 	 port(
-		 md : in STD_LOGIC;
-		 line_in : in STD_LOGIC;
-		 clock : in STD_LOGIC;
-		 reset : in STD_LOGIC;
-		 line_out : out STD_LOGIC
+		 E : in STD_LOGIC;
+		 CLK : in STD_LOGIC;
+		 RESET : in STD_LOGIC;
+		 Q : out STD_LOGIC;
+		 Qb : out STD_LOGIC
 	     );
-end crc_module;
+end shift_reg;
 
 --}} End of automatically maintained section
 
-architecture simplest_arch of crc_module is
+architecture str_shift_reg of shift_reg is
 begin
 
 	 -- enter your statements here --
 
-end simplest_arch;
+end str_shift_reg;

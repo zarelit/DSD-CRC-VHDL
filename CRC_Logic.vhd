@@ -1,46 +1,47 @@
 -------------------------------------------------------------------------------
 --
--- Title       : crc_module
+-- Title       : CRC_logic
 -- Design      : CRCmd
 -- Author      : Giuliano
 -- Company     : La mia
 --
 -------------------------------------------------------------------------------
 --
--- File        : crc_def.vhd
--- Generated   : Tue Dec 18 09:29:41 2012
+-- File        : CRC_Logic.vhd
+-- Generated   : Wed Dec 19 10:24:09 2012
 -- From        : interface description file
 -- By          : Itf2Vhdl ver. 1.22
 --
 -------------------------------------------------------------------------------
 --
--- Description : It defines the entity and the different architecture for a
--- CRC hardware module.
+-- Description : This file defines a generic CRC calculator based on N flip flop
+-- of type d. It accept a polinomial and creates the correct structure in order
+-- to compute the CRC.
 --
 -------------------------------------------------------------------------------
 
 --{{ Section below this comment is automatically maintained
 --   and may be overwritten
---{entity {crc_module} architecture {simplest_arch}}
+--{entity {CRC_logic} architecture {str_CRC}}
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
-entity crc_module is
+entity CRC_logic is
 	 port(
-		 md : in STD_LOGIC;
-		 line_in : in STD_LOGIC;
-		 clock : in STD_LOGIC;
-		 reset : in STD_LOGIC;
-		 line_out : out STD_LOGIC
+		 D : in STD_LOGIC;
+		 CLOCK : in STD_LOGIC;
+		 RESET : in STD_LOGIC;
+		 ENABLE : in STD_LOGIC;
+		 Q : out STD_LOGIC
 	     );
-end crc_module;
+end CRC_logic;
 
 --}} End of automatically maintained section
 
-architecture simplest_arch of crc_module is
+architecture str_CRC of CRC_logic is
 begin
 
 	 -- enter your statements here --
 
-end simplest_arch;
+end str_CRC;

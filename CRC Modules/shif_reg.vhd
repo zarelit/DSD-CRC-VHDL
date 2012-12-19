@@ -56,7 +56,7 @@ BEGIN
      end generate INT_CELLS;
 	 
      LAST_CELL: if i= Cells_num generate  -- last cell
-       FFL: ffd port map (Qint(Cells_num-1), q, open, clk, reset);
+     	FFL: ffd port map (Qint(Cells_num-1), q, open, clk, reset);
 	 end generate LAST_CELL;
 	 
     end generate CREATE;

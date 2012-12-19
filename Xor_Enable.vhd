@@ -1,46 +1,48 @@
 -------------------------------------------------------------------------------
 --
--- Title       : crc_module
+-- Title       : xor_enable
 -- Design      : CRCmd
 -- Author      : Giuliano
 -- Company     : La mia
 --
 -------------------------------------------------------------------------------
 --
--- File        : crc_def.vhd
--- Generated   : Tue Dec 18 09:29:41 2012
+-- File        : Xor_Enable.vhd
+-- Generated   : Wed Dec 19 10:49:19 2012
 -- From        : interface description file
 -- By          : Itf2Vhdl ver. 1.22
 --
 -------------------------------------------------------------------------------
 --
--- Description : It defines the entity and the different architecture for a
--- CRC hardware module.
+-- Description : 
 --
 -------------------------------------------------------------------------------
 
 --{{ Section below this comment is automatically maintained
 --   and may be overwritten
---{entity {crc_module} architecture {simplest_arch}}
+--{entity {xor_enable} architecture {df_xor_enable}}
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
-entity crc_module is
+entity xor_enable is
 	 port(
-		 md : in STD_LOGIC;
-		 line_in : in STD_LOGIC;
-		 clock : in STD_LOGIC;
-		 reset : in STD_LOGIC;
-		 line_out : out STD_LOGIC
+		 A : in STD_LOGIC;
+		 B : in STD_LOGIC;
+		 E : in STD_LOGIC;
+		 C : out STD_LOGIC
 	     );
-end crc_module;
+end xor_enable;
 
 --}} End of automatically maintained section
 
-architecture simplest_arch of crc_module is
+architecture df_xor_enable of xor_enable is
+-- AND's exit
+signal y : std_logic;
 begin
+COMPUTE : process (A,B,E)
+begin
+	C <= (A and E) xor B;
+end process COMPUTE;
 
-	 -- enter your statements here --
-
-end simplest_arch;
+end df_xor_enable;
