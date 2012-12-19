@@ -45,8 +45,74 @@ end CRC_logic;
 --}} End of automatically maintained section
 
 architecture str_CRC of CRC_logic is
+component ffd is
+	port(
+		 D : in STD_LOGIC;
+		 Q : out STD_LOGIC;
+		 Qb : out STD_LOGIC;
+		 Clock : in std_logic;
+		 Reset : in std_logic
+	     );
+end component ffd;
+
+-- if E = 0 the entire logic becomes a shift register
+component xor_enable is
+	port(
+		 A : in STD_LOGIC;
+		 B : in STD_LOGIC;
+		 E : in STD_LOGIC;
+		 C : out STD_LOGIC
+	     );
+end component xor_enable;
+
+-- internal ffd's i/o signals, they will be o/i for xor_enable cells
+signal Qint : std_logic_vector(1 to POLINOMIAL_ORDER);
+signal Dint : std_logic_vector(1 to POLINOMIAL_ORDER);
+
 begin
+-------------------------------------------------------------------------------
+-- Here we generate following structure:
+-- 			  ------		  ------
+-- Qk-1 ---->+ xor +-- Dk -->+ ffd +--- Qk --->  
+-- 			 ---+--			 -+-+-
+--       enable |		CLK	  | | RESET
+--			----+			--+ +----
+-------------------------------------------------------------------------------	
 
-	 -- enter your statements here --
-
+CREATE: for i in 1 to POLINOMIAL_ORDER generate
+	FIRST_CELL: if i = 1 generate  -- first cell
+	
+		XE1: xor_enable port map 
+		(
+			A => Qint(POLINOMIAL_ORDER),
+			B => D,
+			E => ENABLE,
+			C => Dint(i)
+		);
+     	FF1: ffd port map (Dint(i), Qint(i), open, Clock, Reset);
+	end generate FIRST_CELL;
+	
+    INT_CELLS: if i > 1 and i < POLINOMIAL_ORDER generate
+		XEINT: xor_enable port map 
+		 (
+			 A => Qint(POLINOMIAL_ORDER),
+			 B => Qint(i-1),
+			 E => ENABLE,
+			 C => Dint(i)
+		 );
+     	FFINT: ffd port map (Dint(i), Qint(i), open, Clock, Reset);
+     end generate INT_CELLS;
+	 
+    LAST_CELL: if i= POLINOMIAL_ORDER generate  -- last cell
+		XEINT: xor_enable port map 
+		 (
+			 A => Qint(POLINOMIAL_ORDER),
+			 B => Qint(i-1),
+			 E => ENABLE,
+			 C => Dint(i)
+		 );
+     	FFL: ffd port map (Dint(i), Qint(i), open, Clock, Reset);
+	 end generate LAST_CELL;
+	 
+    end generate CREATE;
 end str_CRC;
