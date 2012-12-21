@@ -30,7 +30,8 @@ use IEEE.STD_LOGIC_1164.all;
 entity CRC_logic is
 	generic(
 	-- because it doesn't exist a polinomial of order < 1
-		POLINOMIAL_ORDER : positive;
+	POLINOMIAL_ORDER : positive;
+	-- its bits are LSB to MSB 
 		POLINOMIAL : std_logic_vector(POLINOMIAL_ORDER-1 downto 0)
 	);
 	 port(
@@ -81,36 +82,48 @@ begin
 
 CREATE: for i in 1 to POLINOMIAL_ORDER generate
 	FIRST_CELL: if i = 1 generate  -- first cell
-	
-		XE1: xor_enable port map 
-		(
-			A => Qint(POLINOMIAL_ORDER),
-			B => D,
-			E => ENABLE,
-			C => Dint(i)
-		);
-     	FF1: ffd port map (Dint(i), Qint(i), open, Clock, Reset);
+		-- iff bit(POLINOMIAL) = '1' add a Xor cell in front of the FFD
+		if (POLINOMIAL(i-1)='1') then
+			XE1: xor_enable port map 
+			(
+				A => Qint(POLINOMIAL_ORDER),
+				B => D,
+				E => ENABLE,
+				C => Dint(i)
+			);			
+		else 
+			Dint(i) <= B;
+		end if;
+   		FF1: ffd port map (Dint(i), Qint(i), open, Clock, Reset);  	
 	end generate FIRST_CELL;
 	
     INT_CELLS: if i > 1 and i < POLINOMIAL_ORDER generate
-		XEINT: xor_enable port map 
-		 (
-			 A => Qint(POLINOMIAL_ORDER),
-			 B => Qint(i-1),
-			 E => ENABLE,
-			 C => Dint(i)
-		 );
+		if (POLINOMIAL(i-1)='1') then
+			XEINT: xor_enable port map 
+			 (
+				 A => Qint(POLINOMIAL_ORDER),
+				 B => Qint(i-1),
+				 E => ENABLE,
+				 C => Dint(i)
+			 );
+		else
+			Dint(i) <= Qint(i-1);
+		end if;
      	FFINT: ffd port map (Dint(i), Qint(i), open, Clock, Reset);
      end generate INT_CELLS;
 	 
     LAST_CELL: if i= POLINOMIAL_ORDER generate  -- last cell
-		XEINT: xor_enable port map 
-		 (
-			 A => Qint(POLINOMIAL_ORDER),
-			 B => Qint(i-1),
-			 E => ENABLE,
-			 C => Dint(i)
-		 );
+		if (POLINOMIAL(i-1)='1') then
+			XEINT: xor_enable port map 
+			 (
+				 A => Qint(POLINOMIAL_ORDER),
+				 B => Qint(i-1),
+				 E => ENABLE,
+				 C => Dint(i)
+			 );
+		else
+			Dint(i) <= Qint(i-1);
+		 end if;
      	FFL: ffd port map (Dint(i), Qint(i), open, Clock, Reset);
 	 end generate LAST_CELL;
 	 
