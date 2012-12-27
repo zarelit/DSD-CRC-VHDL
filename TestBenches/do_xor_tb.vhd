@@ -56,7 +56,7 @@ signal input_e : std_logic;
 signal input_a : std_logic;
 signal output_c : std_logic;
 begin
-	UUT : xor_enable port map(input_a, clock_wire, input_e, output_c);
+	UUT : do_xor port map(input_a, clock_wire, input_e, output_c);
 	CG  : gen_clock generic map (PERIOD => 40 ns, NUM_OF_PERIODS => 30)
 	port map (clock_wire);
 	

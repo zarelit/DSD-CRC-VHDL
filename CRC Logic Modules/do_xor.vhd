@@ -27,18 +27,18 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
-entity xor_enable is
+entity do_xor is
 	 port(
 		 A : in STD_LOGIC;
 		 B : in STD_LOGIC;
 		 E : in STD_LOGIC;
 		 C : out STD_LOGIC
 	     );
-end xor_enable;
+end do_xor;
 
 --}} End of automatically maintained section
 
-architecture df_xor_enable of xor_enable is
+architecture df_xor_enable of do_xor is
 begin
 	C <= (A and E) xor B;
 	

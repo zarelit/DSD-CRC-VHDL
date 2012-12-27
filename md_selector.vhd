@@ -27,14 +27,14 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
-entity md_selector is
+entity md_sel is
 	 port(
 		 in_a : in STD_LOGIC;
 		 in_b : in STD_LOGIC;
 		 in_c : in STD_LOGIC;
 		 output : out STD_LOGIC
 	     );
-end md_selector;
+end md_sel;
 
 --}} End of automatically maintained section
 
