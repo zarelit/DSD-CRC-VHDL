@@ -26,41 +26,52 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
-entity clock_counter is
-	generic (N : positive := 1);
+entity CRC_control is
+	generic (N : positive := 1;
+	-- how long Q signal must be high
+		HOW_LONG : positive := 1);
 	 port(
 	 	Clock : in STD_LOGIC;
 		Reset : in STD_LOGIC; -- active high
-		Q : out STD_LOGIC := '0' -- this  avoids undefined behaviour
+		-- qontrol signal
+		Q : out STD_LOGIC := '0'
 	     );
-end clock_counter;
+end CRC_control;
 
 --}} End of automatically maintained section
 
-architecture behave_counter of clock_counter is
+architecture behave_control of CRC_control is
 
 begin
 	
-	-- count every rising edge of the clock
-	count : process (Clock, Reset)
+	-- count every rising edge of the clock. When N cycles passed it sets
+	-- Q signal for HOW_LONG cycles then it resets itself
+	process (Clock, Reset)
 	variable i : natural := 0;
+	constant tot_cycles : natural := N + HOW_LONG;
 	begin
-		
 		if Reset = '1' then
 			Q <= '0';
-			i:= 0;
+			i := 0;
 			
-		elsif rising_edge(Clock) and Q = '0' then
-			i := i + 1;
+		elsif rising_edge(Clock) then
 			
+			i := i + 1;				-- count pleease
+			case i is
+				when N =>
+					Q <= '1';
+				when tot_cycle =>	-- reset itself
+					Q <= '0';
+					i := 0;
+				when OTHERS => NULL;
+					
+			end case;			
 			if i = N then
 				Q <= '1';
 			end if;
+			
 		end if;
 
-	end process count;
-		
-				
-	 -- enter your statements here --
+	end process;
 
-end behave_counter;
+end behave_control;
