@@ -38,9 +38,9 @@ end md_sel;
 
 --}} End of automatically maintained section
 
-architecture behave_md_selector of md_selector is
+architecture behave_md_selector of md_sel is
 
 begin
-	output <= (in_a or in_b) and in_c
+	output <= (in_a or in_b) and in_c;
 
 end behave_md_selector;

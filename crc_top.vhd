@@ -99,7 +99,7 @@ signal crc_logic_out : std_logic;
 signal input_wire : std_logic;
 signal md_wire : std_logic;
 signal clk_wire : std_logic;
-signal rst_wire : std_logic = '0';
+signal rst_wire : std_logic := '0';
 
 -- for output signals
 signal busy_wire : std_logic;
@@ -109,17 +109,17 @@ begin
 -- connections from port to internal signals
 -- input signals
 	md_wire <= md;
-	clock_wire <= clock;
+	clk_wire <= clock;
 	rst_wire <= reset;
 	
 -- output signals 
 	busy <= busy_wire;
-	output <= output_wire;
+	line_out <= output_wire;
 	
 -- it selects the correct behaviour of the module
-	MD : md_sel 
+	MD_S : md_sel 
 		port map (
-			md => md_clk_wire,
+			md => md_wire,
 			CRC_control => crc_ctrl_out,
 			input => input_wire,
 			output => md_sel_out);
@@ -129,14 +129,14 @@ begin
 		port map (
 			d => md_sel_out, 
 			q => ffd_q, 
-			open, 
+			qb => open, 
 			clock => clk_wire, 
 			reset => rst_wire);
 	
 	-- it choices what is the output to be sent out
 	MUX : multiplexer 
 		port map (
-			output_control => crc_ctrl_out,
+			output_ctrl => crc_ctrl_out,
 			in_a => ffd_q,
 			in_b => crc_logic_out,
 			output => output_wire);
