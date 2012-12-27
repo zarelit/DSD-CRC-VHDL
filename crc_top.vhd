@@ -33,7 +33,7 @@ entity crc_module is
 		 clock : in STD_LOGIC;
 		 reset : in STD_LOGIC;
 		 line_out : out STD_LOGIC;
-		 ready_asdasdasd\ : out std_logic; --active low
+		 busy : out std_logic; --active low
 	     );
 end crc_module;
 
