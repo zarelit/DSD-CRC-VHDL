@@ -42,19 +42,21 @@ component gen_clock is
 	     );
 end component gen_clock;
 
-component clock_counter is
-	generic (N : positive := 1);
+component CRC_control is
+	generic (N : positive := 1;
+	HOW_LONG : positive);
 	 port(
 	 	Clock : in STD_LOGIC;
 		Reset : in STD_LOGIC; -- active high
 		Q : out STD_LOGIC
 	     );
-end component clock_counter;
+end component;
 
 -- control constants
 constant TIMES : positive:= 40;
 constant CLK_PERIOD : time := 40 ns;
 constant HOW_MANY_PERIODS : positive := 5;
+constant HOW_LONG_HIGH : positive :=8;
 
 -- input/output signals
 signal clock_signal : std_logic;
@@ -62,7 +64,7 @@ signal reset_signal : std_logic := '0';
 signal counter_exit : std_logic;
 
 begin
-UUT : clock_counter generic map (N => HOW_MANY_PERIODS)
+UUT : CRC_control generic map (N => HOW_MANY_PERIODS, HOW_LONG => HOW_LONG_HIGH)
 port map (clock_signal, reset_signal, counter_exit);
 
 CG : gen_clock generic map (PERIOD => CLK_PERIOD, NUM_OF_PERIODS => TIMES)
@@ -74,8 +76,6 @@ test : process (clock_signal)
 		if rising_edge(clock_signal) then
 			count_per := count_per + 1;
 		end if;
-		reset_signal <= '1' when count_per = 10;
-		reset_signal <= '0' when count_per = 20;
 		reset_signal <= '1' when count_per = 30;
 		reset_signal <= '0' when count_per = 32;
 	end process;
