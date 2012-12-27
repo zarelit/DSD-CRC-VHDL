@@ -33,13 +33,54 @@ entity crc_module is
 		 clock : in STD_LOGIC;
 		 reset : in STD_LOGIC;
 		 line_out : out STD_LOGIC;
-		 busy : out std_logic; --active low
+		 busy : out std_logic --active low
 	     );
 end crc_module;
 
 --}} End of automatically maintained section
 
 architecture simplest_arch of crc_module is
+
+component CRC_logic is
+	
+	 port(
+		 MSG_IN : in STD_LOGIC;
+		 CLOCK : in STD_LOGIC;
+		 RESET : in STD_LOGIC;
+		 CRC_ENABLE : in STD_LOGIC;
+		 MSG_OUT : out STD_LOGIC
+	     );
+		 
+end component;
+
+component CRC_control is
+	port (
+		CLOCK : in std_logic;
+		RESET : in std_logic;
+		-- CRC control
+		CRC_CTRL : out std_logic
+	);
+end component;
+
+component ffd is
+		 port(
+			 D : in STD_LOGIC;
+			 Q : out STD_LOGIC;
+			 Qb : out STD_LOGIC;
+			 Clock : in std_logic;
+			 Reset : in std_logic
+	     );
+end component;
+
+component multiplexer is
+		 port(
+			 output_ctrl : in std_logic := '0';
+			 in_a : in std_logic;
+			 in_b : in std_logic;
+			 output : out std_logic
+	     );
+end component;
+
 begin
 
 end simplest_arch;
