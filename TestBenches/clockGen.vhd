@@ -32,20 +32,21 @@ entity gen_clock is
 	NUM_OF_PERIODS : positive := 1
 	);
 	port(
-		 CLK : inout STD_LOGIC := '0'
+		 CLK : out STD_LOGIC := '0'
 	     );
 end gen_clock;
 
 --}} End of automatically maintained section
 
 architecture g_clock of gen_clock is
-
+signal internalClk : STD_LOGIC := '0';
 begin
-	gen_clk : process
+	clk<=internalClk;
+	process
 	constant tot_semi_periods : integer := NUM_OF_PERIODS * 2;
 	begin
 		for i in 0 to tot_semi_periods - 1 loop
-			clk <= not clk after period/2;
+			internalClk <= not internalClk after period/2;
 			wait for period/2;
 		end loop;
 		wait;
