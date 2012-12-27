@@ -24,7 +24,6 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
-use IEEE.STD_LOGIC_ARITH.all;
 
 entity gen_clock is
 	-- diversi periodi per ovvie esigenze
@@ -33,7 +32,7 @@ entity gen_clock is
 	NUM_OF_PERIODS : positive := 1
 	);
 	port(
-		 CLK : out STD_LOGIC := '0'
+		 CLK : inout STD_LOGIC := '0'
 	     );
 end gen_clock;
 
