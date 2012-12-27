@@ -1,49 +1,46 @@
 -------------------------------------------------------------------------------
 --
--- Title       : xor_enable
+-- Title       : md_selector
 -- Design      : CRCmd
 -- Author      : Giuliano
 -- Company     : La mia
 --
 -------------------------------------------------------------------------------
 --
--- File        : Xor_Enable.vhd
--- Generated   : Wed Dec 19 10:49:19 2012
+-- File        : md_selector.vhd
+-- Generated   : Thu Dec 27 17:11:25 2012
 -- From        : interface description file
 -- By          : Itf2Vhdl ver. 1.22
 --
 -------------------------------------------------------------------------------
 --
--- Description : 
+-- Description : it implements the logic function 
+--					
+--					output = (in_a | in_b) & in_c
 --
 -------------------------------------------------------------------------------
 
 --{{ Section below this comment is automatically maintained
 --   and may be overwritten
---{entity {xor_enable} architecture {df_xor_enable}}
+--{entity {md_selector} architecture {behave_md_selector}}
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
-entity xor_enable is
+entity md_sel is
 	 port(
-		 A : in STD_LOGIC;
-		 B : in STD_LOGIC;
-		 E : in STD_LOGIC;
-		 C : out STD_LOGIC
+		 in_a : in STD_LOGIC;
+		 in_b : in STD_LOGIC;
+		 in_c : in STD_LOGIC;
+		 output : out STD_LOGIC
 	     );
-end xor_enable;
+end md_sel;
 
 --}} End of automatically maintained section
 
-architecture df_xor_enable of xor_enable is
--- AND's exit
-signal y : std_logic;
-begin
-	
-	process (A,B,E)	
-	begin
-		C <= (A and E) xor B;
-	end process;
+architecture behave_md_selector of md_sel is
 
-end df_xor_enable;
+begin
+	output <= (in_a or in_b) and in_c;
+
+end behave_md_selector;
