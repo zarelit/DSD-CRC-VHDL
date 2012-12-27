@@ -32,7 +32,8 @@ entity crc_module is
 		 line_in : in STD_LOGIC;
 		 clock : in STD_LOGIC;
 		 reset : in STD_LOGIC;
-		 line_out : out STD_LOGIC
+		 line_out : out STD_LOGIC;
+		 ready_n : out std_logic; --active low
 	     );
 end crc_module;
 
@@ -40,7 +41,5 @@ end crc_module;
 
 architecture simplest_arch of crc_module is
 begin
-
-	 -- enter your statements here --
 
 end simplest_arch;
