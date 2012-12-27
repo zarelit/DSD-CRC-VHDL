@@ -29,8 +29,8 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity CRC_logic is
 	generic(
-	-- because it doesn't exist a polinomial of order < 1
-	POLINOMIAL_ORDER : positive;
+	-- because it doesn't have any sense if order < 1
+		POLINOMIAL_ORDER : positive;
 	-- its bits are LSB to MSB 
 		POLINOMIAL : std_logic_vector(POLINOMIAL_ORDER-1 downto 0)
 	);

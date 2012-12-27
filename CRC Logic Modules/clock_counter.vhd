@@ -31,7 +31,7 @@ entity clock_counter is
 	 port(
 	 	Clock : in STD_LOGIC;
 		Reset : in STD_LOGIC; -- active high
-		Q : out STD_LOGIC := '0' -- this  avoids undefined behaviour
+		Q : out STD_LOGIC := '0'
 	     );
 end clock_counter;
 
@@ -42,7 +42,7 @@ architecture behave_counter of clock_counter is
 begin
 	
 	-- count every rising edge of the clock
-	count : process (Clock, Reset)
+	process (Clock, Reset)
 	variable i : natural := 0;
 	begin
 		
@@ -58,9 +58,6 @@ begin
 			end if;
 		end if;
 
-	end process count;
-		
-				
-	 -- enter your statements here --
+	end process;
 
 end behave_counter;

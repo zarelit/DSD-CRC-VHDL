@@ -40,9 +40,10 @@ architecture df_xor_enable of xor_enable is
 -- AND's exit
 signal y : std_logic;
 begin
-COMPUTE : process (A,B,E)
-begin
-	C <= (A and E) xor B;
-end process COMPUTE;
+	
+	process (A,B,E)	
+	begin
+		C <= (A and E) xor B;
+	end process;
 
 end df_xor_enable;
