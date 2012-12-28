@@ -76,8 +76,11 @@ test : process (clock_signal)
 		if rising_edge(clock_signal) then
 			count_per := count_per + 1;
 		end if;
-		reset_signal <= '1' when count_per = 30;
-		reset_signal <= '0' when count_per = 32;
+		case count_per is
+			when 30 => reset_signal <= '1';
+			when 32 => reset_signal <= '0';
+			when others => null;
+		end case;
 	end process;
 
 end tb_counter;
