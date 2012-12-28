@@ -62,7 +62,7 @@ constant HOW_LONG_HIGH : positive :=8;
 signal clock_signal : std_logic;
 signal reset_signal : std_logic := '0';
 signal counter_exit : std_logic;
-
+variable count_per : natural := 0;
 begin
 UUT : CRC_control generic map (N => HOW_MANY_PERIODS, HOW_LONG => HOW_LONG_HIGH)
 port map (clock_signal, reset_signal, counter_exit);
@@ -70,14 +70,15 @@ port map (clock_signal, reset_signal, counter_exit);
 CG : gen_clock generic map (PERIOD => CLK_PERIOD, NUM_OF_PERIODS => TIMES)
 port map (clock_signal);
 
+
 test : process (clock_signal)
-	variable count_per : natural := 0;
+	
 	begin
 		if rising_edge(clock_signal) then
 			count_per := count_per + 1;
 		end if;
-		reset_signal <= '1' when count_per = 30;
-		reset_signal <= '0' when count_per = 32;
 	end process;
 
+	reset_signal <= '1' when count_per = 30;
+	reset_signal <= '0' when count_per = 32;
 end tb_counter;
