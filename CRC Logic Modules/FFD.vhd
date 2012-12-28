@@ -40,17 +40,19 @@ end ffd;
 -- robust version of the DFF, it set to 0 the input if RESET='0'. This avoids
 -- the undefined behaviour of the output at beginning of the simulation.
 architecture ffd_behave of ffd is
+signal internalQ : STD_LOGIC;
 begin
+	Q <= internalQ;
 	
 	works : process (Clock)
 	begin
 		if Reset = '0' then
-			Q <= '0';	
+			internalQ <= '0';	
 		-- rising edge of the clock
 		elsif (Clock'event and Clock = '1') then
-			Q <= D;
+			internalQ <= D;
 		end if;
-		Qb <= not Q;
+		Qb <= not internalQ;
 	end process;
 	 -- enter your statements here --
 
