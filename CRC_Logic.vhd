@@ -32,7 +32,12 @@ entity CRC_logic is
 	-- because it doesn't have any sense if order < 1
 		POLINOMIAL_ORDER : positive;
 	-- its bits are LSB to MSB 
-		POLINOMIAL : std_logic_vector(POLINOMIAL_ORDER-1 downto 0)
+		--POLINOMIAL : std_logic_vector(POLINOMIAL_ORDER-1 downto 0)
+		--Defining a generic as a function of another generic is not
+		--allowed.
+		--Defining a constant (i.e. MAX_ORDER_) is allowed only in the
+		--architecture, thus "64" is now hardcoded.
+		POLINOMIAL : std_logic_vector(64-1 downto 0)
 	);
 	 port(
 		 D : in STD_LOGIC;
