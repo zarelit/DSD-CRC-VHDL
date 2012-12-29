@@ -25,12 +25,12 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
-entity counter_tb is
-end counter_tb;
+entity crc_module_tb is
+end crc_module_tb;
 
 --}} End of automatically maintained section
 
-architecture tb_counter of counter_tb is
+architecture tb_crc_module of crc_module_tb is
 
 component gen_clock is
 	generic (
@@ -82,4 +82,4 @@ test : process (clock_signal)
 		end case;
 	end process;
 
-end tb_counter;
+end tb_crc_module;
