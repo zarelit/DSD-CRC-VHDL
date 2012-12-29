@@ -91,9 +91,11 @@ CREATE: for i in 1 to POLINOMIAL_ORDER generate
 				E => ENABLE,
 				C => Dint(i)
 			);			
-		else generate
-			Dint(i) <= D;
 		end generate FIRST_XOR;
+		FIRST_XOR_ABSENT: if (POLINOMIAL(i-1)/='1') generate
+			Dint(i) <= D;
+		end generate FIRST_XOR_ABSENT;
+		
    		FF1: ffd port map (Dint(i), Qint(i), open, Clock, Reset);  	
 	end generate FIRST_CELL;
 	
@@ -106,9 +108,10 @@ CREATE: for i in 1 to POLINOMIAL_ORDER generate
 				 E => ENABLE,
 				 C => Dint(i)
 			 );
-		else generate
-			Dint(i) <= Qint(i-1);
 		end generate INT_XOR;
+		INT_XOR_ABSENT:if (POLINOMIAL(i-1)/='1') generate
+			Dint(i) <= Qint(i-1);
+		end generate INT_XOR_ABSENT;
      	FFINT: ffd port map (Dint(i), Qint(i), open, Clock, Reset);
      end generate INT_CELLS;
 	 
@@ -121,9 +124,10 @@ CREATE: for i in 1 to POLINOMIAL_ORDER generate
 				 E => ENABLE,
 				 C => Dint(i)
 			 );
-		else generate
+		end generate LAST_XOR;
+		LAST_XOR_ABSENT: if (POLINOMIAL(i-1)/='1') generate
 			Dint(i) <= Qint(i-1);
-		 end generate LAST_XOR;
+		 end generate LAST_XOR_ABSENT;
      	FFL: ffd port map (Dint(i), Qint(i), open, Clock, Reset);
 	 end generate LAST_CELL;
 	 

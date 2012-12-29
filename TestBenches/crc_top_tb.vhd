@@ -42,7 +42,7 @@ component gen_clock is
 	     );
 end component gen_clock;
 
-entity crc_module is
+component crc_module is
 	 port(
 		 md : in STD_LOGIC;
 		 line_in : in STD_LOGIC;
@@ -51,7 +51,7 @@ entity crc_module is
 		 line_out : out STD_LOGIC;
 		 busy : out std_logic --active low
 	     );
-end crc_module;
+end component crc_module;
 
 -- control constants
 constant TIMES : positive:= 40;
@@ -75,8 +75,11 @@ test : process (clock_signal)
 		if rising_edge(clock_signal) then
 			count_per := count_per + 1;
 		end if;
-		reset_signal <= '1' when count_per = 30;
-		reset_signal <= '0' when count_per = 32;
+		case count_per is
+			when 30 => reset_signal <= '1';
+			when 32 => reset_signal <= '0';
+			when others => null;
+		end case;
 	end process;
 
 end tb_counter;
