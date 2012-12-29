@@ -24,6 +24,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
+use STD.TEXTIO.all;
 
 entity crc_module_tb is
 end crc_module_tb;
@@ -54,32 +55,66 @@ component crc_module is
 end component crc_module;
 
 -- control constants
-constant TIMES : positive:= 40;
+constant TIMES : positive:= 10000;
 constant CLK_PERIOD : time := 40 ns;
 
 -- input/output signals
 signal clock_signal : std_logic;
 signal reset_signal : std_logic := '0';
+signal test_data_bit: std_logic := '0';
+signal test_data_vec: std_logic_vector(55 downto 0);
+signal tx_out : std_logic;
+signal tx_busy : std_logic;
 
 
 begin
---UUT : crc_module port map()
-
+TRANSMITTER : crc_module port map('0', test_data_bit, clock_signal,
+		 reset_signal, tx_out, tx_busy);
+		 
 
 CG : gen_clock generic map (PERIOD => CLK_PERIOD, NUM_OF_PERIODS => TIMES)
 port map (clock_signal);
 
-test : process (clock_signal)
+progress_and_reset : process (clock_signal)
 	variable count_per : natural := 0;
 	begin
 		if rising_edge(clock_signal) then
 			count_per := count_per + 1;
 		end if;
 		case count_per is
-			when 30 => reset_signal <= '1';
-			when 32 => reset_signal <= '0';
+			when 28 => reset_signal <= '1';
+			when 31 => reset_signal <= '0';
 			when others => null;
 		end case;
-	end process;
+end process;
+
+read_line: process (reset_signal, tx_busy)
+file INFILE: text is in "TestBenches/testInput.txt";
+variable myLine : line;
+variable myLineBits : bit_vector (55 downto 0);
+begin
+	if( falling_edge(tx_busy) or falling_edge(reset_signal)) then
+		-- read a line and put it on test_data_vec
+		readline(INFILE,myLine);
+		read(myLine,myLineBits);
+		test_data_vec <= to_stdlogicvector(myLineBits);
+	end if;
+end process;
+
+feed_input: process (test_data_vec, clock_signal,reset_signal)
+variable index : natural := 0;
+begin
+	if(reset_signal'event and reset_signal = '0') or
+	  (test_data_vec'event) then
+		index := 0;
+		test_data_bit <= test_data_vec(55);
+	elsif (clock_signal'event and clock_signal='1') then
+	    index := (index+1) mod 56;
+		-- MSB first
+		--test_data_bit <= test_data_vec(55-index);
+		-- LSB first
+		test_data_bit <= test_data_vec(index);
+	end if;
+end process;
 
 end tb_crc_module;

@@ -22,7 +22,7 @@
 
 --{{ Section below this comment is automatically maintained
 --   and may be overwritten
---{entity {xor_enable} architecture {df_xor_enable}}
+--{entity {do_xor} architecture {df_do_xor}}
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
@@ -38,8 +38,8 @@ end do_xor;
 
 --}} End of automatically maintained section
 
-architecture df_xor_enable of do_xor is
+architecture df_do_xor of do_xor is
 begin
 	C <= (A and E) xor B;
 	
-end df_xor_enable;
+end df_do_xor;

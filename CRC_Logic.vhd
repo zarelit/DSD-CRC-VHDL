@@ -62,16 +62,16 @@ component ffd is
 end component ffd;
 
 -- if E = 0 the entire logic becomes a shift register
-component xor_enable is
+component do_xor is
 	port(
 		 A : in STD_LOGIC;
 		 B : in STD_LOGIC;
 		 E : in STD_LOGIC;
 		 C : out STD_LOGIC
 	     );
-end component xor_enable;
+end component do_xor;
 
--- internal ffd's i/o signals, they will be o/i for xor_enable cells
+-- internal ffd's i/o signals, they will be o/i for do_xor cells
 signal Qint : std_logic_vector(1 to POLINOMIAL_ORDER);
 signal Dint : std_logic_vector(1 to POLINOMIAL_ORDER);
 
@@ -89,7 +89,7 @@ CREATE: for i in 1 to POLINOMIAL_ORDER generate
 	FIRST_CELL: if i = 1 generate  -- first cell
 		-- iff bit(POLINOMIAL) = '1' add a Xor cell in front of the FFD
 		FIRST_XOR: if (POLINOMIAL(i-1)='1') generate
-			XE1: xor_enable port map 
+			XE1: do_xor port map 
 			(
 				A => Qint(POLINOMIAL_ORDER),
 				B => D,
@@ -106,7 +106,7 @@ CREATE: for i in 1 to POLINOMIAL_ORDER generate
 	
     INT_CELLS: if i > 1 and i < POLINOMIAL_ORDER generate
 		INT_XOR: if (POLINOMIAL(i-1)='1') generate
-			XEINT: xor_enable port map 
+			XEINT: do_xor port map 
 			 (
 				 A => Qint(POLINOMIAL_ORDER),
 				 B => Qint(i-1),
@@ -122,7 +122,7 @@ CREATE: for i in 1 to POLINOMIAL_ORDER generate
 	 
     LAST_CELL: if i= POLINOMIAL_ORDER generate  -- last cell
 		LAST_XOR: if (POLINOMIAL(i-1)='1') generate
-			XEINT: xor_enable port map 
+			XEINT: do_xor port map 
 			 (
 				 A => Qint(POLINOMIAL_ORDER),
 				 B => Qint(i-1),
