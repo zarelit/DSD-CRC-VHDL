@@ -131,7 +131,7 @@ begin
 	MD_S : md_sel 
 		port map (
 			md_wire,
-			crc_ctrl_out,
+			crc_ctrl_out_n,
 			line_in,
 			md_sel_out);
 			
