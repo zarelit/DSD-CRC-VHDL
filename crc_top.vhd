@@ -155,8 +155,12 @@ begin
 	-- it computes the CRC based on the input message
 	CRC_REG : crc_logic
 		generic map(
+			-- Our polynomial: x^8+x^4+x^2+1
 			POLINOMIAL_ORDER => 9,
-			POLINOMIAL => (8=>'1',4=>'1',2=>'1',0=>'1',others=>'0')
+			-- MSB to LSB (100010101, 0x115)
+			-- POLINOMIAL => (8=>'1',4=>'1',2=>'1',0=>'1',others=>'0')
+			-- LSB to MSB (101010001)
+			POLINOMIAL => (8=>'1',6=>'1',4=>'1',0=>'1', others=>'0')
 			)
 		port map (
 			md_sel_out,
