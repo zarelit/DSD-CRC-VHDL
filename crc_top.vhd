@@ -52,15 +52,15 @@ end component;
 
 component CRC_logic is
 	generic(
-		POLINOMIAL_ORDER : positive;
+		POLINOMIAL_ORDER : natural;
 		POLINOMIAL : std_logic_vector(64-1 downto 0)
 	);
 	 port(
-		 D : in STD_LOGIC;
-		 CLOCK : in STD_LOGIC;
-		 RESET : in STD_LOGIC;
-		 ENABLE : in STD_LOGIC;
-		 Q : out STD_LOGIC
+		 d : in std_logic;
+		 clock : in std_logic;
+		 reset : in std_logic;
+		 enable : in std_logic;
+		 q : out std_logic
 	     );
 		 
 end component;
