@@ -50,7 +50,7 @@ begin
 	variable i : natural := 0;
 	constant tot_cycles : natural := N + HOW_LONG;
 	begin
-		if Reset = '1' then
+		if Reset = '0' then
 			Q <= '0';
 			i := 0;
 			

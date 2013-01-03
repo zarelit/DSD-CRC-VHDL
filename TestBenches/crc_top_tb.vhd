@@ -82,8 +82,8 @@ progress_and_reset : process (clock_signal)
 			count_per := count_per + 1;
 		end if;
 		case count_per is
-			when 28 => reset_signal <= '1';
-			when 31 => reset_signal <= '0';
+			when 28 => reset_signal <= '0';
+			when 31 => reset_signal <= '1';
 			when others => null;
 		end case;
 end process;
