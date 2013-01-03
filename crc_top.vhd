@@ -158,9 +158,9 @@ begin
 			-- Our polynomial: x^8+x^4+x^2+1
 			POLINOMIAL_ORDER => 8,
 			-- MSB to LSB (100010101, 0x115)
-			-- POLINOMIAL => (8=>'1',4=>'1',2=>'1',0=>'1',others=>'0')
+			 POLINOMIAL => (8=>'1',4=>'1',2=>'1',0=>'1',others=>'0')
 			-- LSB to MSB (101010001)
-			POLINOMIAL => (8=>'1',6=>'1',4=>'1',0=>'1', others=>'0')
+			--POLINOMIAL => (8=>'1',6=>'1',4=>'1',0=>'1', others=>'0')
 			)
 		port map (
 			md_sel_out,
@@ -174,7 +174,7 @@ begin
 	CRC_CTRL_LG : crc_control
 		generic map(
 			N => 56,
-			HOW_LONG => 9
+			HOW_LONG => 8
 		)
 		port map (
 			clk_wire,
