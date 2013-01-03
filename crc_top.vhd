@@ -156,7 +156,7 @@ begin
 	CRC_REG : crc_logic
 		generic map(
 			-- Our polynomial: x^8+x^4+x^2+1
-			POLINOMIAL_ORDER => 9,
+			POLINOMIAL_ORDER => 8,
 			-- MSB to LSB (100010101, 0x115)
 			-- POLINOMIAL => (8=>'1',4=>'1',2=>'1',0=>'1',others=>'0')
 			-- LSB to MSB (101010001)
