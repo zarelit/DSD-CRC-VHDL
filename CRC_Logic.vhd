@@ -32,12 +32,12 @@ entity CRC_logic is
 	-- because it doesn't have any sense if order < 1
 		POLINOMIAL_ORDER : natural;
 	-- its bits are LSB to MSB 
-		--POLINOMIAL : std_logic_vector(POLINOMIAL_ORDER-1 downto 0)
+		POLINOMIAL : std_logic_vector(POLINOMIAL_ORDER-1 downto 0)
 		--Defining a generic as a function of another generic is not
 		--allowed.
 		--Defining a constant (i.e. MAX_ORDER_) is allowed only in the
 		--architecture, thus "64" is now hardcoded.
-		POLINOMIAL : std_logic_vector(64-1 downto 0)
+		--POLINOMIAL : std_logic_vector(64-1 downto 0)
 	);
 	 port(
 		 D : in STD_LOGIC;
@@ -91,40 +91,57 @@ CREATE: for i in 1 to POLINOMIAL_ORDER generate
 		FIRST_XOR: if (POLINOMIAL(i-1)='1') generate
 			XE1: do_xor port map 
 			(
-				A => Qint(POLINOMIAL_ORDER),
+				A => Qint(POLINOMIAL_ORDER), -- last ffd's output
 				B => D,
 				E => ENABLE,
 				C => Dint(i)
 			);			
 		end generate FIRST_XOR;
+		
 		FIRST_XOR_ABSENT: if (POLINOMIAL(i-1)/='1') generate
 			Dint(i) <= D;
 		end generate FIRST_XOR_ABSENT;
 		
-   		FF1: ffd port map (Dint(i), Qint(i), open, Clock, Reset);  	
+   		FF1: ffd port map (
+		   			Dint(i), -- connected to the do_xor cell's output 
+		   			Qint(i), 
+					open, 
+					Clock, 
+					Reset); 
+				
 	end generate FIRST_CELL;
 	
     INT_CELLS: if i > 1 and i < POLINOMIAL_ORDER generate
 		INT_XOR: if (POLINOMIAL(i-1)='1') generate
 			XEINT: do_xor port map 
 			 (
-				 A => Qint(POLINOMIAL_ORDER),
+				 A => Qint(POLINOMIAL_ORDER), -- last ffd's output
 				 B => Qint(i-1),
 				 E => ENABLE,
 				 C => Dint(i)
 			 );
 		end generate INT_XOR;
+		
 		INT_XOR_ABSENT:if (POLINOMIAL(i-1)/='1') generate
+			-- if there isn't the i-1 term of the polinomial then 
+			-- attach the input of ith ffd to the i-1th ffd's output
 			Dint(i) <= Qint(i-1);
 		end generate INT_XOR_ABSENT;
-     	FFINT: ffd port map (Dint(i), Qint(i), open, Clock, Reset);
+		
+     	FFINT: ffd port map (
+		 			Dint(i), 
+		 			Qint(i), 
+					open, 
+					Clock, 
+					Reset);
+					
      end generate INT_CELLS;
 	 
-    LAST_CELL: if i= POLINOMIAL_ORDER generate  -- last cell
+    LAST_CELL: if i = POLINOMIAL_ORDER generate
 		LAST_XOR: if (POLINOMIAL(i-1)='1') generate
 			XEINT: do_xor port map 
 			 (
-				 A => Qint(POLINOMIAL_ORDER),
+				 A => Qint(POLINOMIAL_ORDER), -- last ffd's output
 				 B => Qint(i-1),
 				 E => ENABLE,
 				 C => Dint(i)
@@ -133,8 +150,17 @@ CREATE: for i in 1 to POLINOMIAL_ORDER generate
 		LAST_XOR_ABSENT: if (POLINOMIAL(i-1)/='1') generate
 			Dint(i) <= Qint(i-1);
 		 end generate LAST_XOR_ABSENT;
-     	FFL: ffd port map (Dint(i), Qint(i), open, Clock, Reset);
+     	FFL: ffd port map (
+				 Dint(i), -- D
+				 Qint(i), -- Q
+				 open, -- Qb
+				 Clock, 
+				 Reset
+				 );
 	 end generate LAST_CELL;
 	 
-    end generate CREATE;
+end generate CREATE;
+
+-- connect to external port
+Q <= Qint(POLINOMIAL_ORDER);
 end str_CRC;

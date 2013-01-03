@@ -76,11 +76,10 @@ component CRC_control is
 	);
 end component;
 
-component ffd is
+component shift_reg is
 		 port(
 			 D : in STD_LOGIC;
 			 Q : out STD_LOGIC;
-			 Qb : out STD_LOGIC;
 			 Clock : in std_logic;
 			 Reset : in std_logic
 	     );
@@ -136,11 +135,10 @@ begin
 			md_sel_out);
 			
 	-- it synchronize the output with the clock.
-	MSG_FFD : ffd 
+	MSG_SHIFT_REG : shift_reg
 		port map (
 			md_sel_out, 
-			ffd_q, 
-			open, 
+			ffd_q,  
 			clk_wire, 
 			rst_wire);
 	
@@ -174,7 +172,7 @@ begin
 	CRC_CTRL_LG : crc_control
 		generic map(
 			N => 56,
-			HOW_LONG => 9
+			HOW_LONG => 17
 		)
 		port map (
 			clk_wire,

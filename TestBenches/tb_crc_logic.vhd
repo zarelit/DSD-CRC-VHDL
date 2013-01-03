@@ -24,6 +24,7 @@
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
+use IEEE.numeric_std.all;
 
 entity crc_logic_tb is
 end crc_logic_tb;
@@ -59,6 +60,16 @@ component crc_logic is
 		 
 end component;
 
+component shift_reg is
+	generic (N : integer);
+	port(
+		 d          : in  std_logic;
+   		 q          : out std_logic;
+         clk        : in  std_logic;
+         reset      : in  std_logic
+		 );
+end component;
+
 -- control parameters
 constant HOW_LONG_I_TEST : integer := 400;
 constant PERIOD_LENGTH : time := 40 ns;
@@ -68,16 +79,18 @@ constant MY_POLINOMIAL : std_logic_vector(8 downto 0) := "101010001";
 -- input signals
 signal line_in : std_logic := '1';
 signal reset_wire : std_logic := '1';
-signal enable_wire : std_logic := '1';
+signal enable_wire : std_logic := '0';
 
 -- output signals
-signal clock_wire : std_logic;
-signal line_out : std_logic;
+signal clock_wire	: std_logic;
+signal line_out 	: std_logic;
+signal reg_out 		: std_logic; -- shift register output
 
 begin
-UUT : crc_logic generic map (
-				POLINOMIAL_ORDER => MY_POLINOMIAL_ORDER,
-				POLINOMIAL => MY_POLINOMIAL)
+UUT : crc_logic 
+	generic map (
+		POLINOMIAL_ORDER => MY_POLINOMIAL_ORDER,
+		POLINOMIAL => MY_POLINOMIAL)
 	port map (
 		line_in,
 		clock_wire,
@@ -85,11 +98,23 @@ UUT : crc_logic generic map (
 		enable_wire,
 		line_out
 	);
+	
 clk_gen : gen_clock generic map (
 	PERIOD => PERIOD_LENGTH,
 	NUM_OF_PERIODS => HOW_LONG_I_TEST
 	)
 	port map (clock_wire);
-	 -- enter your statements here --
-
+-- shift register to compare
+SRTC : shift_reg generic map (N => 8) port map (line_in, reg_out, clock_wire, reset_wire);
+test_proc : process (clock_wire)
+variable count : integer := 0;
+begin
+	count := count + 1;
+	case count is
+		when 3	=> reset_wire <= '0';
+		when 8 => reset_wire <= '1';
+		when others => null;
+	end case;
+	
+end process;
 end tb_crc_logic;
