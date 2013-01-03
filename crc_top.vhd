@@ -174,7 +174,7 @@ begin
 	CRC_CTRL_LG : crc_control
 		generic map(
 			N => 56,
-			HOW_LONG => 8
+			HOW_LONG => 16
 		)
 		port map (
 			clk_wire,

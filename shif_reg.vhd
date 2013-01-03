@@ -38,7 +38,7 @@ architecture STRUCTURAL of shift_reg is
    port( d          : in  std_logic;
    		 q          : out std_logic;
    		 clk        : in  std_logic;
-         reset      : in  std_logic; -- active low
+         reset      : in  std_logic -- active low
          );
    END COMPONENT;
 
