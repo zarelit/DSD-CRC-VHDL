@@ -30,7 +30,7 @@ use IEEE.STD_LOGIC_1164.all;
 entity CRC_logic is
 	generic(
 	-- because it doesn't have any sense if order < 1
-		POLINOMIAL_ORDER : positive;
+		POLINOMIAL_ORDER : natural;
 	-- its bits are LSB to MSB 
 		--POLINOMIAL : std_logic_vector(POLINOMIAL_ORDER-1 downto 0)
 		--Defining a generic as a function of another generic is not
