@@ -76,7 +76,7 @@ component CRC_control is
 	);
 end component;
 
-component ffd is
+component shift_reg is
 		 port(
 			 D : in STD_LOGIC;
 			 Q : out STD_LOGIC;
@@ -136,11 +136,10 @@ begin
 			md_sel_out);
 			
 	-- it synchronize the output with the clock.
-	MSG_FFD : ffd 
+	MSG_SHIFT_REG : shift_reg
 		port map (
 			md_sel_out, 
-			ffd_q, 
-			open, 
+			ffd_q,  
 			clk_wire, 
 			rst_wire);
 	

@@ -28,7 +28,7 @@ ENTITY shift_reg is
    port( d          : in  std_logic;
    		 q          : out std_logic;
          clk        : in  std_logic;
-         reset      : in  std_logic -- active low
+         reset      : in  std_logic
          );
 END shift_reg;
 
@@ -37,8 +37,9 @@ architecture STRUCTURAL of shift_reg is
    COMPONENT ffd
    port( d          : in  std_logic;
    		 q          : out std_logic;
-   		 clk        : in  std_logic;
-         reset      : in  std_logic -- active low
+   	 	 qb 		: out std_logic;
+   		 clock      : in  std_logic;
+         reset      : in  std_logic
          );
    END COMPONENT;
 
@@ -47,13 +48,13 @@ BEGIN
 
    GEN: for i in 1 to N generate
      FIRST: if i= 1 generate  -- first cell
-       FF1: ffd port map (d, Qint(i),clk, reset);
+       FF1: ffd port map (d, Qint(i), open, clk, reset);
      end generate FIRST;
      INTERNAL: if i > 1 and i < N generate
-       FFI: ffd port map (Qint(i-1), Qint(i), clk, reset);
+       FFI: ffd port map (Qint(i-1), Qint(i), open, clk, reset);
      end generate INTERNAL;
      LAST: if i= N generate  -- last cell
-       FF1: ffd port map (Qint(N-1), q, clk, reset);
+       FF1: ffd port map (Qint(N-1), q, open, clk, reset);
       end generate LAST;
     end generate GEN;
 
