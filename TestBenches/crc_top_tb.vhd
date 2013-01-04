@@ -66,6 +66,7 @@ signal test_data_vec: std_logic_vector(55 downto 0);
 signal tx_out : std_logic;
 signal tx_busy : std_logic;
 
+signal indexs:integer;
 
 begin
 TRANSMITTER : crc_module port map('0', test_data_bit, clock_signal,
@@ -107,9 +108,14 @@ begin
 	if(reset_signal'event and reset_signal = '0') or
 	  (test_data_vec'event) then
 		index := 0;
-		test_data_bit <= test_data_vec(55);
+		indexs <= index;
+		--MSB first
+		--test_data_bit <= test_data_vec(55);
+		--LSB first
+		test_data_bit <= test_data_vec(0);
 	elsif (clock_signal'event and clock_signal='1') then
 	    index := (index+1) mod 56;
+	    indexs <= index;
 		-- MSB first
 		--test_data_bit <= test_data_vec(55-index);
 		-- LSB first
