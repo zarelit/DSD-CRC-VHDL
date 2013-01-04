@@ -58,7 +58,7 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <rect fill="none" height="186" stroke="#000000" stroke-width="2" width="134" x="327" y="181"/>
       <text font-family="SansSerif" font-size="12" text-anchor="middle" x="389" y="275">CRC module</text>
       <circ-port height="8" pin="260,120" width="8" x="316" y="186"/>
-      <circ-port height="8" pin="250,340" width="8" x="316" y="196"/>
+      <circ-port height="8" pin="120,340" width="8" x="316" y="196"/>
       <circ-port height="8" pin="250,380" width="8" x="316" y="206"/>
       <circ-port height="8" pin="110,160" width="8" x="316" y="216"/>
       <circ-port height="10" pin="810,210" width="10" x="465" y="185"/>
@@ -67,45 +67,54 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     </appear>
     <wire from="(340,200)" to="(340,270)"/>
     <wire from="(300,160)" to="(350,160)"/>
+    <wire from="(410,180)" to="(510,180)"/>
     <wire from="(340,200)" to="(350,200)"/>
     <wire from="(110,160)" to="(120,160)"/>
-    <wire from="(440,180)" to="(440,250)"/>
+    <wire from="(620,180)" to="(620,200)"/>
+    <wire from="(760,210)" to="(810,210)"/>
     <wire from="(120,270)" to="(340,270)"/>
+    <wire from="(680,240)" to="(740,240)"/>
     <wire from="(300,120)" to="(300,160)"/>
     <wire from="(120,160)" to="(120,270)"/>
+    <wire from="(120,340)" to="(460,340)"/>
     <wire from="(260,120)" to="(300,120)"/>
-    <wire from="(460,260)" to="(510,260)"/>
-    <wire from="(430,180)" to="(440,180)"/>
-    <wire from="(250,340)" to="(460,340)"/>
-    <wire from="(440,250)" to="(510,250)"/>
-    <wire from="(460,260)" to="(460,340)"/>
+    <wire from="(680,240)" to="(680,270)"/>
+    <wire from="(740,230)" to="(740,240)"/>
+    <wire from="(460,190)" to="(460,340)"/>
+    <wire from="(460,190)" to="(510,190)"/>
+    <wire from="(610,180)" to="(620,180)"/>
+    <wire from="(620,200)" to="(730,200)"/>
     <comp lib="0" loc="(110,160)" name="Pin">
       <a name="tristate" val="false"/>
       <a name="label" val="Line_IN"/>
-    </comp>
-    <comp lib="4" loc="(510,250)" name="Shift Register">
-      <a name="label" val="Delayer, shift reg"/>
-      <a name="labelfont" val="SansSerif plain 9"/>
     </comp>
     <comp lib="0" loc="(250,380)" name="Pin">
       <a name="tristate" val="false"/>
       <a name="label" val="Reset"/>
     </comp>
+    <comp lib="4" loc="(510,180)" name="Shift Register">
+      <a name="label" val="Shift Register"/>
+      <a name="labelfont" val="SansSerif plain 9"/>
+    </comp>
     <comp lib="0" loc="(260,120)" name="Pin">
       <a name="tristate" val="false"/>
       <a name="label" val="MD, selects the behaviour of the chip"/>
     </comp>
-    <comp loc="(430,200)" name="MD_Enable"/>
-    <comp lib="0" loc="(250,340)" name="Pin">
+    <comp lib="0" loc="(120,340)" name="Pin">
       <a name="tristate" val="false"/>
       <a name="label" val="Clock"/>
     </comp>
+    <comp loc="(410,150)" name="MD_Enable"/>
+    <comp lib="2" loc="(760,210)" name="Multiplexer"/>
     <comp lib="0" loc="(810,250)" name="Pin">
       <a name="facing" val="west"/>
       <a name="output" val="true"/>
       <a name="tristate" val="false"/>
       <a name="label" val="BUSY"/>
       <a name="labelloc" val="east"/>
+    </comp>
+    <comp lib="6" loc="(384,134)" name="Text">
+      <a name="text" val="MD_Enable"/>
     </comp>
     <comp lib="0" loc="(810,210)" name="Pin">
       <a name="facing" val="west"/>
@@ -166,7 +175,7 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
   </circuit>
   <circuit name="MD_Enable">
     <a name="circuit" val="MD_Enable"/>
-    <a name="clabel" val="MD_Enable"/>
+    <a name="clabel" val=""/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
     <appear>
@@ -218,6 +227,41 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <a name="clabel" val=""/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
+    <wire from="(370,140)" to="(370,200)"/>
+    <wire from="(290,140)" to="(290,200)"/>
+    <wire from="(550,140)" to="(630,140)"/>
+    <wire from="(690,200)" to="(710,200)"/>
+    <wire from="(370,200)" to="(390,200)"/>
+    <wire from="(110,140)" to="(220,140)"/>
+    <wire from="(290,200)" to="(300,200)"/>
+    <wire from="(630,200)" to="(640,200)"/>
+    <wire from="(460,140)" to="(460,200)"/>
+    <wire from="(70,140)" to="(110,140)"/>
+    <wire from="(460,140)" to="(550,140)"/>
+    <wire from="(290,140)" to="(370,140)"/>
+    <wire from="(110,200)" to="(120,200)"/>
+    <wire from="(220,140)" to="(220,200)"/>
+    <wire from="(460,200)" to="(470,200)"/>
+    <wire from="(110,140)" to="(110,200)"/>
+    <wire from="(690,140)" to="(690,200)"/>
+    <wire from="(630,140)" to="(690,140)"/>
+    <wire from="(550,200)" to="(560,200)"/>
+    <wire from="(220,140)" to="(290,140)"/>
+    <wire from="(550,140)" to="(550,200)"/>
+    <wire from="(220,200)" to="(230,200)"/>
+    <wire from="(370,140)" to="(460,140)"/>
+    <wire from="(630,140)" to="(630,200)"/>
+    <comp lib="0" loc="(70,140)" name="Pin">
+      <a name="tristate" val="false"/>
+    </comp>
+    <comp lib="4" loc="(510,200)" name="D Flip-Flop"/>
+    <comp lib="4" loc="(430,200)" name="D Flip-Flop"/>
+    <comp lib="4" loc="(600,200)" name="D Flip-Flop"/>
+    <comp lib="4" loc="(270,200)" name="D Flip-Flop"/>
+    <comp lib="4" loc="(750,200)" name="D Flip-Flop"/>
+    <comp lib="4" loc="(680,200)" name="D Flip-Flop"/>
+    <comp lib="4" loc="(340,200)" name="D Flip-Flop"/>
+    <comp lib="4" loc="(160,200)" name="D Flip-Flop"/>
   </circuit>
   <circuit name="CRC Controller">
     <a name="circuit" val="CRC Controller"/>
