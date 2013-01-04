@@ -28,13 +28,17 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity CRC_control is
 	generic (N : positive := 1;
-	-- how long Q signal must be high
+	-- how long the CRC logic must be enabled
+	-- after the last bit of data is received
 		HOW_LONG : positive := 1);
 	 port(
 	 	Clock : in STD_LOGIC;
 		Reset : in STD_LOGIC; -- active high
-		-- qontrol signal
-		Q : out STD_LOGIC := '0'
+		-- qontrol signals
+		-- Q clears the inputs
+		-- U enables the XORing
+		Q : out STD_LOGIC := '0';
+		U : out STD_LOGIC := '0'
 	     );
 end CRC_control;
 
@@ -48,7 +52,7 @@ begin
 	-- Q signal for HOW_LONG cycles then it resets itself
 	process (Clock, Reset)
 	variable i : natural := 0;
-	constant tot_cycles : natural := N + HOW_LONG;
+	constant tot_cycles : natural := N + HOW_LONG *2;
 	begin
 		if Reset = '0' then
 			Q <= '0';
@@ -59,9 +63,13 @@ begin
 			
 			if i = N then
 				Q <= '1';
+			
+			elsif i = N+HOW_LONG then
+				U <= '0';
 				
 			elsif i = tot_cycles then 
 				Q <= '0';			-- reset itself
+				U <= '1';
 				i := 0;
 				
 			end if;

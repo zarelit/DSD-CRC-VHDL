@@ -72,17 +72,16 @@ component CRC_control is
 	 	Clock : in STD_LOGIC;
 		Reset : in STD_LOGIC; -- active high
 		-- qontrol signal
-		Q : out STD_LOGIC := '0'
+		Q : out STD_LOGIC := '0';
+		U : out STD_LOGIC := '0'
 	);
 end component;
 
 component shift_reg is
-		 port(
-			 D : in STD_LOGIC;
-			 Q : out STD_LOGIC;
-			 Qb : out STD_LOGIC;
-			 Clock : in std_logic;
-			 Reset : in std_logic
+	port( d          : in  std_logic;
+   		 q          : out std_logic;
+         clk        : in  std_logic;
+         reset      : in  std_logic
 	     );
 end component;
 
@@ -99,6 +98,7 @@ end component;
 signal md_sel_out : std_logic;
 signal crc_ctrl_out : std_logic;
 signal crc_ctrl_out_n : std_logic;
+signal crc_enable : std_logic;
 signal ffd_q : std_logic;
 signal crc_logic_out : std_logic;
 
@@ -165,7 +165,7 @@ begin
 			md_sel_out,
 			clk_wire,
 			rst_wire,
-			crc_ctrl_out_n,
+			crc_enable,
 			crc_logic_out);
 	
 	-- it controls the data flow, from message received to crc computed and sent
@@ -173,11 +173,12 @@ begin
 	CRC_CTRL_LG : crc_control
 		generic map(
 			N => 56,
-			HOW_LONG => 16
+			HOW_LONG => 8
 		)
 		port map (
 			clk_wire,
 			rst_wire,
-			crc_ctrl_out);
+			crc_ctrl_out,
+			crc_enable);
 	
 end serial_behave;
