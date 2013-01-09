@@ -65,12 +65,16 @@ signal test_data_bit: std_logic := '0';
 signal test_data_vec: std_logic_vector(55 downto 0);
 signal tx_out : std_logic;
 signal tx_busy : std_logic;
+signal rx_out : std_logic;
 
 signal indexs:integer;
 
 begin
 TRANSMITTER : crc_module port map('0', test_data_bit, clock_signal,
 		 reset_signal, tx_out, tx_busy);
+
+RECEIVER : crc_module port map('1', tx_out, clock_signal,
+		 reset_signal, rx_out, open);
 		 
 
 CG : gen_clock generic map (PERIOD => CLK_PERIOD, NUM_OF_PERIODS => TIMES)
