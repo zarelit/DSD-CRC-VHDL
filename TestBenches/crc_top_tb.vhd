@@ -90,7 +90,7 @@ progress_and_reset : process (clock_signal)
 end process;
 
 read_line: process (reset_signal, tx_busy)
-file INFILE: text is in "TestBenches/testInput.txt";
+file INFILE: text is in "TestBenches/testInputNonRev.txt";
 variable myLine : line;
 variable myLineBits : bit_vector (55 downto 0);
 begin
@@ -110,16 +110,16 @@ begin
 		index := 0;
 		indexs <= index;
 		--MSB first
-		--test_data_bit <= test_data_vec(55);
+		test_data_bit <= test_data_vec(55);
 		--LSB first
-		test_data_bit <= test_data_vec(0);
+		--test_data_bit <= test_data_vec(0);
 	elsif (clock_signal'event and clock_signal='1') then
 	    index := (index+1) mod 56;
 	    indexs <= index;
 		-- MSB first
-		--test_data_bit <= test_data_vec(55-index);
+		test_data_bit <= test_data_vec(55-index);
 		-- LSB first
-		test_data_bit <= test_data_vec(index);
+		--test_data_bit <= test_data_vec(index);
 	end if;
 end process;
 
