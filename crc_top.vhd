@@ -78,6 +78,7 @@ component CRC_control is
 end component;
 
 component shift_reg is
+	generic (N:integer := 4);
 	port( d          : in  std_logic;
    		 q          : out std_logic;
          clk        : in  std_logic;
@@ -99,6 +100,7 @@ signal md_sel_out : std_logic;
 signal crc_ctrl_out : std_logic;
 signal crc_ctrl_out_n : std_logic;
 signal crc_enable : std_logic;
+signal crc_enable_n : std_logic;
 signal ffd_q : std_logic;
 signal crc_logic_out : std_logic;
 
@@ -127,7 +129,7 @@ begin
 
 -- internal signals
 	crc_ctrl_out_n <= not crc_ctrl_out;
-	
+	crc_enable_n <= not crc_enable;
 -- it selects the correct behaviour of the module
 	MD_S : md_sel 
 		port map (
@@ -137,7 +139,7 @@ begin
 			md_sel_out);
 			
 	-- it synchronize the output with the clock.
-	MSG_SHIFT_REG : shift_reg
+	MSG_SHIFT_REG : shift_reg generic map( N=> 8)
 		port map (
 			md_sel_out, 
 			ffd_q,  
@@ -147,7 +149,7 @@ begin
 	-- it choices what is the output to be sent out
 	MUX : multiplexer 
 		port map (
-			crc_ctrl_out,
+			crc_enable_n,
 			ffd_q,
 			crc_logic_out,
 			output_wire);
