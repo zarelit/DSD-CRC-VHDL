@@ -18,15 +18,15 @@ numBits = 56
 # Amount of data
 numLines = 1000
 # Output file
-outFile = "./testInput.txt"
-outResFile = "./testOutput.txt"
+outFile = "./testInputNonRev.txt"
+outResFile = "./testOutputNonRev.txt"
 
 ## Open files
 inf = open(outFile, 'w')
 outf = open(outResFile, 'w')
 
 # Generate a function that calculates the CRC with our polynomial
-crc_func = crcmod.mkCrcFun(poly, initCrc=0)
+crc_func = crcmod.mkCrcFun(poly, initCrc=0, rev=False)
 
 # Format specifications
 numFormat = "0{}b".format(numBits) # E.G. 0x05 => "0000000101"
