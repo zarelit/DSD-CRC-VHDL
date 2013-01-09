@@ -29,10 +29,10 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity CRC_logic is
 	generic(
-	-- because it doesn't have any sense if order < 1
-		POLINOMIAL_ORDER : natural;
+	-- number of bit of the polinomial
+		NUM_BITS_POLYNOMIAL : natural;
 	-- its bits are LSB to MSB 
-		POLINOMIAL : std_logic_vector(POLINOMIAL_ORDER-1 downto 0)
+		POLYNOMIAL_BITS : std_logic_vector(NUM_BITS_POLYNOMIAL-1 downto 0)
 		--Defining a generic as a function of another generic is not
 		--allowed.
 		--Defining a constant (i.e. MAX_ORDER_) is allowed only in the
@@ -72,8 +72,8 @@ component do_xor is
 end component do_xor;
 
 -- internal ffd's i/o signals, they will be o/i for do_xor cells
-signal Qint : std_logic_vector(1 to POLINOMIAL_ORDER);
-signal Dint : std_logic_vector(1 to POLINOMIAL_ORDER);
+signal Qint : std_logic_vector(1 to NUM_BITS_POLYNOMIAL);
+signal Dint : std_logic_vector(1 to NUM_BITS_POLYNOMIAL);
 
 begin
 -------------------------------------------------------------------------------
@@ -85,13 +85,13 @@ begin
 --			----+			--+ +----
 -------------------------------------------------------------------------------	
 
-CREATE: for i in 1 to POLINOMIAL_ORDER generate
+CREATE: for i in 1 to NUM_BITS_POLYNOMIAL - 1 generate
 	FIRST_CELL: if i = 1 generate  -- first cell
 		-- iff bit(POLINOMIAL) = '1' add a Xor cell in front of the FFD
-		FIRST_XOR: if (POLINOMIAL(i-1)='1') generate
+		FIRST_XOR: if (POLYNOMIAL_BITS(i-1)='1') generate
 			XE1: do_xor port map 
 			(
-				A => Qint(POLINOMIAL_ORDER), -- last ffd's output
+				A => Qint(NUM_BITS_POLYNOMIAL), -- last ffd's output
 				B => D,
 				E => ENABLE,
 				C => Dint(i)
@@ -110,10 +110,10 @@ CREATE: for i in 1 to POLINOMIAL_ORDER generate
 	end generate FIRST_CELL;
 	
     INT_CELLS: if i > 1 generate
-		INT_XOR: if (POLINOMIAL(i-1)='1') generate
+		INT_XOR: if (POLYNOMIAL_BITS(i-1)='1') generate
 			XEINT: do_xor port map 
 			 (
-				 A => Qint(POLINOMIAL_ORDER), -- last ffd's output
+				 A => Qint(NUM_BITS_POLYNOMIAL), -- last ffd's output
 				 B => Qint(i-1),
 				 E => ENABLE,
 				 C => Dint(i)
@@ -137,5 +137,6 @@ CREATE: for i in 1 to POLINOMIAL_ORDER generate
 end generate CREATE;
 
 -- connect to external port
-Q <= Qint(POLINOMIAL_ORDER-1);
+Q <= Qint(NUM_BITS_POLYNOMIAL-1);
+
 end str_CRC;

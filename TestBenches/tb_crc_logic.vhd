@@ -46,9 +46,9 @@ end component;
 component crc_logic is
 	generic(
 	-- if order = 0 then the crc logic is a simple shift register
-		POLINOMIAL_ORDER : natural;
+		NUM_BITS_POLYNOMIAL : natural;
 		-- LSB to MSB
-		POLINOMIAL : std_logic_vector(8 downto 0)
+		POLYNOMIAL_BITS : std_logic_vector(8 downto 0)
 	);
 	 port(
 		 D : in STD_LOGIC;
@@ -73,8 +73,8 @@ end component;
 -- control parameters
 constant HOW_LONG_I_TEST : integer := 400;
 constant PERIOD_LENGTH : time := 40 ns;
-constant MY_POLINOMIAL_ORDER : natural := 9;
-constant MY_POLINOMIAL : std_logic_vector(8 downto 0) := "101010001";
+constant MY_NUM_BITS_POLYNOMIAL : natural := 9;
+constant MY_POLYNOMIAL_BITS : std_logic_vector(MY_NUM_BITS_POLYNOMIAL - 1 downto 0) := "101010001";
 
 -- input signals
 signal line_in : std_logic := '1';
@@ -89,8 +89,8 @@ signal reg_out 		: std_logic; -- shift register output
 begin
 UUT : crc_logic 
 	generic map (
-		POLINOMIAL_ORDER => MY_POLINOMIAL_ORDER,
-		POLINOMIAL => MY_POLINOMIAL)
+		NUM_BITS_POLYNOMIAL => MY_NUM_BITS_POLYNOMIAL,
+		POLYNOMIAL_BITS => MY_POLYNOMIAL_BITS)
 	port map (
 		line_in,
 		clock_wire,
@@ -112,7 +112,7 @@ begin
 	count := count + 1;
 	case count is
 		when 3	=> reset_wire <= '0';
-		when 8 => reset_wire <= '1';
+		when 5 => reset_wire <= '1';
 		when others => null;
 	end case;
 	

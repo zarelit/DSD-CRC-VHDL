@@ -52,8 +52,8 @@ end component;
 
 component CRC_logic is
 	generic(
-		POLINOMIAL_ORDER : natural;
-		POLINOMIAL : std_logic_vector(64-1 downto 0)
+		NUM_BITS_POLYNOMIAL : natural;
+		POLYNOMIAL_BITS : std_logic_vector(64-1 downto 0)
 	);
 	 port(
 		 d : in std_logic;
@@ -156,9 +156,9 @@ begin
 	CRC_REG : crc_logic
 		generic map(
 			-- Our polynomial: x^8+x^4+x^2+1
-			POLINOMIAL_ORDER => 9,
+			NUM_BITS_POLYNOMIAL => 9,
 			-- MSB to LSB (100010101, 0x115)
-			 POLINOMIAL => (8=>'1',4=>'1',2=>'1',0=>'1',others=>'0')
+			 POLYNOMIAL_BITS => (8=>'1',4=>'1',2=>'1',0=>'1',others=>'0')
 			-- LSB to MSB (101010001)
 			--POLINOMIAL => (8=>'1',6=>'1',4=>'1',0=>'1', others=>'0')
 			)
