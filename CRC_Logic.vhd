@@ -91,7 +91,7 @@ CREATE: for i in 1 to NUM_BITS_POLYNOMIAL - 1 generate
 		FIRST_XOR: if (POLYNOMIAL_BITS(i-1)='1') generate
 			XE1: do_xor port map 
 			(
-				A => Qint(NUM_BITS_POLYNOMIAL), -- last ffd's output
+				A => Qint(NUM_BITS_POLYNOMIAL-1), -- last ffd's output
 				B => D,
 				E => ENABLE,
 				C => Dint(i)
@@ -113,7 +113,7 @@ CREATE: for i in 1 to NUM_BITS_POLYNOMIAL - 1 generate
 		INT_XOR: if (POLYNOMIAL_BITS(i-1)='1') generate
 			XEINT: do_xor port map 
 			 (
-				 A => Qint(NUM_BITS_POLYNOMIAL), -- last ffd's output
+				 A => Qint(NUM_BITS_POLYNOMIAL-1), -- last ffd's output
 				 B => Qint(i-1),
 				 E => ENABLE,
 				 C => Dint(i)

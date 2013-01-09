@@ -64,7 +64,7 @@ begin
 			if i = N then
 				Q <= '1';
 			
-			elsif i = N+HOW_LONG then
+			elsif i = N + HOW_LONG then
 				U <= '0';
 				
 			elsif i = tot_cycles then 

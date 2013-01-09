@@ -79,7 +79,7 @@ constant MY_POLYNOMIAL_BITS : std_logic_vector(MY_NUM_BITS_POLYNOMIAL - 1 downto
 -- input signals
 signal line_in : std_logic := '1';
 signal reset_wire : std_logic := '1';
-signal enable_wire : std_logic := '0';
+signal enable_wire : std_logic := '1';
 
 -- output signals
 signal clock_wire	: std_logic;

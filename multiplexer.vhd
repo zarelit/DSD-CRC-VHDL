@@ -37,14 +37,15 @@ end multiplexer;
 --}} End of automatically maintained section
 
 architecture inv_input of multiplexer is
+
+signal in_a_wire : std_logic;
+signal in_b_wire : std_logic;
+signal out_wire : std_logic;
+
 begin
-	process(control) 
-	begin
-		if (control = '0') then
-			output <= in_a;
-		else					 
-			output <= in_b;
-		end if;	
-	end process;
+	in_a_wire <= in_a;
+	in_b_wire <= in_b;
+	output <= out_wire;
+	out_wire <= (in_a_wire and not control) or (in_b_wire and control);
 
 end inv_input;
