@@ -44,7 +44,7 @@ end component gen_clock;
 
 component CRC_control is
 	generic (N : positive := 1;
-	HOW_LONG : positive);
+	ACTIVE_TIME : positive);
 	 port(
 	 	Clock : in STD_LOGIC;
 		Reset : in STD_LOGIC; -- active high
@@ -64,7 +64,7 @@ signal reset_signal : std_logic := '0';
 signal counter_exit : std_logic;
 
 begin
-UUT : CRC_control generic map (N => HOW_MANY_PERIODS, HOW_LONG => HOW_LONG_HIGH)
+UUT : CRC_control generic map (N => HOW_MANY_PERIODS, ACTIVE_TIME => HOW_LONG_HIGH)
 port map (clock_signal, reset_signal, counter_exit);
 
 CG : gen_clock generic map (PERIOD => CLK_PERIOD, NUM_OF_PERIODS => TIMES)

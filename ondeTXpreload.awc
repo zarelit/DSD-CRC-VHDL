@@ -6,7 +6,7 @@
     </comment>
     <databases>
         <database id="">*virtual*</database>
-        <database id="08002785937058C9EE505E342E001500">ondeTXpreload.asdb</database>
+        <database id="08002785937058C9EE505E342E001500">wave.asdb</database>
     </databases>
     <signallists>
         <signallist id="0">
@@ -66,7 +66,7 @@
         </measurements>
     </measurementbases>
     <views>
-        <view signallist="0" propertybase="0" prefbase="0" type="1" bookmarks="0" cursors="0" measurements="0" />
+        <view signallist="0" propertybase="0" prefbase="0" type="1" bookmarks="0" cursors="0" measurements="1" />
     </views>
     <virtualsources>
         <virtualnamedrows>
