@@ -24,9 +24,10 @@ USE IEEE.std_logic_1164.all;
 
 ENTITY shift_reg is
 
-   generic (N : INTEGER:=4);
+   generic (N : INTEGER := 4);
    port( d          : in  std_logic;
    		 q          : out std_logic;
+		 stages		: out std_logic_vector(0 to N-1);
          clk        : in  std_logic;
          reset      : in  std_logic
          );
@@ -47,15 +48,21 @@ architecture STRUCTURAL of shift_reg is
 BEGIN
 
    GEN: for i in 1 to N generate
-     FIRST: if i= 1 generate  -- first cell
-       FF1: ffd port map (d, Qint(i), open, clk, reset);
+     FIRST: if i = 1 generate  -- first cell
+       	FF1: ffd port map (d, Qint(i), open, clk, reset);
+		stages(i-1) <= Qint(i);
      end generate FIRST;
+	 
      INTERNAL: if i > 1 and i < N generate
-       FFI: ffd port map (Qint(i-1), Qint(i), open, clk, reset);
+       	FFI: ffd port map (Qint(i-1), Qint(i), open, clk, reset);
+		stages(i-1) <= Qint(i);
      end generate INTERNAL;
-     LAST: if i= N generate  -- last cell
-       FF1: ffd port map (Qint(N-1), q, open, clk, reset);
-      end generate LAST;
+	 
+     LAST: if i = N generate  -- last cell
+       	FF1: ffd port map (Qint(N-1), q, open, clk, reset);
+		stages(i-1) <= q;
+     end generate LAST;
+	
     end generate GEN;
 
 

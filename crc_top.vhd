@@ -122,7 +122,8 @@ begin
 	input_wire <= line_in;
 	clk_wire <= clock;
 	rst_wire <= reset;
-	
+	-- for future purpouses
+	rst_wire <= ready_in;
 -- output signals 
 	busy <= busy_wire;
 	line_out <= output_wire;
