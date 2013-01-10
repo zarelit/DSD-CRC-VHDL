@@ -34,7 +34,6 @@ entity crc_module is
 		 reset : in STD_LOGIC;
 		 line_out : out STD_LOGIC;
 		 busy : out std_logic --active low
-		 ready_in : in std_logic;
 	     );
 end crc_module;
 
@@ -68,7 +67,7 @@ end component;
 
 component CRC_control is
 	generic (N : positive := 1;
-		HOW_LONG : positive := 1);
+		ACTIVE_TIME : positive := 1);
 	port (
 	 	Clock : in STD_LOGIC;
 		Reset : in STD_LOGIC; -- active high
@@ -123,8 +122,7 @@ begin
 	input_wire <= line_in;
 	clk_wire <= clock;
 	rst_wire <= reset;
-	-- for future purpouses
-	rst_wire <= ready_in;
+
 -- output signals 
 	busy <= busy_wire;
 	line_out <= output_wire;
@@ -133,6 +131,7 @@ begin
 -- internal signals
 	crc_ctrl_out_n <= not crc_ctrl_out;
 	crc_enable_n <= not crc_enable;
+	
 -- it selects the correct behaviour of the module
 	MD_S : md_sel 
 		port map (
@@ -180,7 +179,7 @@ begin
 	CRC_CTRL_LG : crc_control
 		generic map(
 			N => 56,
-			HOW_LONG => 8
+			ACTIVE_TIME => 8
 		)
 		port map (
 			clk_wire,

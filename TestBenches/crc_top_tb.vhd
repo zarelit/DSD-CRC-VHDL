@@ -55,13 +55,13 @@ component crc_module is
 end component crc_module;
 
 -- control constants
-constant TIMES : positive:= 10000;
+constant TIMES : positive:= 1000;
 constant CLK_PERIOD : time := 40 ns;
-constant NUM_BITS_READ : natural := 64;
+constant NUM_BITS_READ : natural := 56;
 
 -- input/output signals
 signal clock_signal : std_logic;
-signal reset_signal : std_logic := '0';
+signal reset_signal : std_logic := '1';
 signal test_data_bit: std_logic := '0';
 signal test_data_vec: std_logic_vector(NUM_BITS_READ - 1 downto 0):=(others => '0');
 signal tx_out : std_logic;
@@ -70,7 +70,7 @@ signal tx_busy : std_logic;
 signal indexs:integer;
 
 begin
-TRANSMITTER : crc_module port map('1', test_data_bit, clock_signal,
+TRANSMITTER : crc_module port map('0', test_data_bit, clock_signal,
 		 reset_signal, tx_out, tx_busy);
 
 CG : gen_clock generic map (PERIOD => CLK_PERIOD, NUM_OF_PERIODS => TIMES)
@@ -91,11 +91,11 @@ progress_and_reset : process (clock_signal)
 end process;
 
 read_line: process (reset_signal, tx_busy)
-file INFILE: text is in "TestBenches/testOutputNonRev.txt";
+file INFILE: text is in "TestBenches/testInputNonRev.txt";
 variable myLine : line;
 variable myLineBits : bit_vector (NUM_BITS_READ-1 downto 0);
 begin
-	if( falling_edge(tx_busy) or falling_edge(reset_signal)) then
+	if( falling_edge(tx_busy) or rising_edge(reset_signal)) then
 		-- read a line and put it on test_data_vec
 		readline(INFILE,myLine);
 		read(myLine,myLineBits);
@@ -115,7 +115,7 @@ begin
 		--LSB first
 		--test_data_bit <= test_data_vec(0);
 	elsif (clock_signal'event and clock_signal='1') then
-	    index := (index+1) mod 64;
+	    index := (index+1) mod NUM_BITS_READ;
 	    indexs <= index;
 		-- MSB first
 		test_data_bit <= test_data_vec(NUM_BITS_READ - 1 - index);
