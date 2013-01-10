@@ -65,6 +65,7 @@ component shift_reg is
 	port(
 		 d          : in  std_logic;
    		 q          : out std_logic;
+   		 stages		: out std_logic_vector(0 to N-1);
          clk        : in  std_logic;
          reset      : in  std_logic
 		 );
@@ -105,7 +106,7 @@ clk_gen : gen_clock generic map (
 	)
 	port map (clock_wire);
 -- shift register to compare
-SRTC : shift_reg generic map (N => 8) port map (line_in, reg_out, clock_wire, reset_wire);
+SRTC : shift_reg generic map (N => 8) port map (line_in, reg_out, open, clock_wire, reset_wire);
 test_proc : process (clock_wire)
 variable count : integer := 0;
 begin
