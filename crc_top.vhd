@@ -42,12 +42,13 @@ end crc_module;
 architecture no_preload of crc_module is
 
 component md_sel is
-	port (
+	 port(
 		 in_a : in STD_LOGIC;
 		 in_b : in STD_LOGIC;
 		 in_c : in STD_LOGIC;
+		 in_d : in STD_LOGIC;
 		 output : out STD_LOGIC
-	);
+	     );
 end component;
 
 component CRC_logic is
@@ -138,6 +139,7 @@ begin
 			md_wire,
 			crc_ctrl_out_n,
 			line_in,
+			crc_enable,
 			md_sel_out);
 			
 	-- it synchronize the output with the clock.
