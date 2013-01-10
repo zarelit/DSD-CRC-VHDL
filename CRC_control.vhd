@@ -30,7 +30,7 @@ entity CRC_control is
 	generic (N : positive := 1;
 	-- how long the CRC logic must be enabled
 	-- after the last bit of data is received
-		HOW_LONG : positive := 1);
+		ACTIVE_TIME : positive := 1);
 	 port(
 	 	Clock : in STD_LOGIC;
 		Reset : in STD_LOGIC; -- active high
@@ -38,13 +38,13 @@ entity CRC_control is
 		-- Q clears the inputs
 		-- U enables the XORing
 		Q : out STD_LOGIC := '0';
-		U : out STD_LOGIC := '0'
+		U : out STD_LOGIC := '0' -- active low
 	     );
 end CRC_control;
 
 --}} End of automatically maintained section
 
-architecture behave_control of CRC_control is
+architecture no_preload_behave of CRC_control is
 
 begin
 	
@@ -78,4 +78,56 @@ begin
 
 	end process;
 
-end behave_control;
+end no_preload_behave;
+
+architecture preload_behave of CRC_control is
+begin
+-- it changes after N clock signal if reset = 1
+Q_SIGNAL : process (Clock, Reset)
+	variable counter :  integer := 0;
+	begin
+		if Reset = '0' then
+			Q <= '0';
+			counter := 0;
+			
+		elsif rising_edge(Clock) then
+			counter := counter + 1;		-- count pleease
+			
+			if counter = N then
+				Q <= '1';
+				
+			elsif counter = N + ACTIVE_TIME then
+				Q <= '0';
+				counter := 0;
+				
+			end if;
+			
+		end if;
+		
+	end process Q_SIGNAL;
+	
+-- U changes only when Q is low
+U_SIGNAL : process (Q, Clock, Reset)
+	variable counter :  integer := 0;
+	begin
+		
+		if Reset = '0' then
+			U <= '1';
+			counter := 0;
+			
+		elsif falling_edge(Q) then
+			counter := 0;
+			U <= '0';
+			
+		elsif rising_edge(Clock) and U = '0' then
+			counter := counter + 1;		-- count pleease
+			
+			if counter = ACTIVE_TIME then
+				U <= '1';
+			end if;
+			
+		end if;
+			
+	end process U_SIGNAL;
+
+end architecture preload_behave;

@@ -40,7 +40,7 @@ end crc_module;
 
 --}} End of automatically maintained section
 
-architecture serial_behave of crc_module is
+architecture no_preload of crc_module is
 
 component md_sel is
 	port (
@@ -188,4 +188,4 @@ begin
 			crc_ctrl_out,
 			crc_enable);
 	
-end serial_behave;
+end no_preload;

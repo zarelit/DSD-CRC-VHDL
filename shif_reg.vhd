@@ -45,6 +45,7 @@ architecture STRUCTURAL of shift_reg is
    END COMPONENT;
 
    SIGNAL Qint: std_logic_vector(1 to N-1);
+   
 BEGIN
 
    GEN: for i in 1 to N generate
@@ -64,6 +65,5 @@ BEGIN
      end generate LAST;
 	
     end generate GEN;
-
 
 END STRUCTURAL;
