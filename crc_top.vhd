@@ -34,6 +34,7 @@ entity crc_module is
 		 reset : in STD_LOGIC;
 		 line_out : out STD_LOGIC;
 		 busy : out std_logic --active low
+		 ready_in : in std_logic;
 	     );
 end crc_module;
 

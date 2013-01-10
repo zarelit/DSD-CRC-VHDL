@@ -57,28 +57,25 @@ end component crc_module;
 -- control constants
 constant TIMES : positive:= 10000;
 constant CLK_PERIOD : time := 40 ns;
+constant NUM_BITS_READ : natural := 64;
 
 -- input/output signals
 signal clock_signal : std_logic;
 signal reset_signal : std_logic := '0';
 signal test_data_bit: std_logic := '0';
-signal test_data_vec: std_logic_vector(55 downto 0);
+signal test_data_vec: std_logic_vector(NUM_BITS_READ - 1 downto 0):=(others => '0');
 signal tx_out : std_logic;
 signal tx_busy : std_logic;
-signal rx_out : std_logic;
 
 signal indexs:integer;
 
 begin
-TRANSMITTER : crc_module port map('0', test_data_bit, clock_signal,
+TRANSMITTER : crc_module port map('1', test_data_bit, clock_signal,
 		 reset_signal, tx_out, tx_busy);
-
-RECEIVER : crc_module port map('1', tx_out, clock_signal,
-		 reset_signal, rx_out, open);
-		 
 
 CG : gen_clock generic map (PERIOD => CLK_PERIOD, NUM_OF_PERIODS => TIMES)
 port map (clock_signal);
+
 
 progress_and_reset : process (clock_signal)
 	variable count_per : natural := 0;
@@ -94,9 +91,9 @@ progress_and_reset : process (clock_signal)
 end process;
 
 read_line: process (reset_signal, tx_busy)
-file INFILE: text is in "TestBenches/testInputNonRev.txt";
+file INFILE: text is in "TestBenches/testOutputNonRev.txt";
 variable myLine : line;
-variable myLineBits : bit_vector (55 downto 0);
+variable myLineBits : bit_vector (NUM_BITS_READ-1 downto 0);
 begin
 	if( falling_edge(tx_busy) or falling_edge(reset_signal)) then
 		-- read a line and put it on test_data_vec
@@ -114,14 +111,14 @@ begin
 		index := 0;
 		indexs <= index;
 		--MSB first
-		test_data_bit <= test_data_vec(55);
+		test_data_bit <= test_data_vec(NUM_BITS_READ - 1);
 		--LSB first
 		--test_data_bit <= test_data_vec(0);
 	elsif (clock_signal'event and clock_signal='1') then
-	    index := (index+1) mod 56;
+	    index := (index+1) mod 64;
 	    indexs <= index;
 		-- MSB first
-		test_data_bit <= test_data_vec(55-index);
+		test_data_bit <= test_data_vec(NUM_BITS_READ - 1 - index);
 		-- LSB first
 		--test_data_bit <= test_data_vec(index);
 	end if;
