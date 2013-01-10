@@ -31,7 +31,7 @@ end crc_module_tb;
 
 --}} End of automatically maintained section
 
-architecture tb_crc_module of crc_module_tb is
+architecture preload_behave_testbench of crc_module_tb is
 
 component gen_clock is
 	generic (
@@ -66,8 +66,6 @@ signal test_data_bit: std_logic := '0';
 signal test_data_vec: std_logic_vector(NUM_BITS_READ - 1 downto 0):=(others => '0');
 signal tx_out : std_logic;
 signal tx_busy : std_logic;
-
-signal indexs:integer;
 
 begin
 TRANSMITTER : crc_module port map('0', test_data_bit, clock_signal,
@@ -109,19 +107,13 @@ begin
 	if(reset_signal'event and reset_signal = '0') or
 	  (test_data_vec'event) then
 		index := 0;
-		indexs <= index;
 		--MSB first
 		test_data_bit <= test_data_vec(NUM_BITS_READ - 1);
-		--LSB first
-		--test_data_bit <= test_data_vec(0);
 	elsif (clock_signal'event and clock_signal='1') then
 	    index := (index+1) mod NUM_BITS_READ;
-	    indexs <= index;
 		-- MSB first
 		test_data_bit <= test_data_vec(NUM_BITS_READ - 1 - index);
-		-- LSB first
-		--test_data_bit <= test_data_vec(index);
 	end if;
 end process;
 
-end tb_crc_module;
+end preload_behave_testbench;
