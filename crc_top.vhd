@@ -82,6 +82,7 @@ component shift_reg is
 	generic (N:integer := 4);
 	port( d          : in  std_logic;
    		 q          : out std_logic;
+   		 stages		: out std_logic_vector(0 to N-1);
          clk        : in  std_logic;
          reset      : in  std_logic
 	     );
@@ -144,7 +145,8 @@ begin
 	MSG_SHIFT_REG : shift_reg generic map( N=> 8)
 		port map (
 			md_sel_out, 
-			ffd_q,  
+			ffd_q, 
+			open, 
 			clk_wire, 
 			rst_wire);
 	
