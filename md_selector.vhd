@@ -32,6 +32,7 @@ entity md_sel is
 		 in_a : in STD_LOGIC;
 		 in_b : in STD_LOGIC;
 		 in_c : in STD_LOGIC;
+		 in_d : in STD_LOGIC;
 		 output : out STD_LOGIC
 	     );
 end md_sel;
@@ -40,7 +41,12 @@ end md_sel;
 
 architecture behave_md_selector of md_sel is
 
-begin
-	output <= (in_a or in_b) and in_c;
+begin					
+	-- See documentation
+	-- in_a = MD
+	-- in_b = Qn
+	-- in_c = IN
+	-- in_d = U									 
+	output <= in_c and (in_b or (in_a and in_d));
 
 end behave_md_selector;
