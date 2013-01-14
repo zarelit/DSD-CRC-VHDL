@@ -14,7 +14,7 @@
 --
 -------------------------------------------------------------------------------
 --
--- Description :
+-- Description : Simple multiplexer
 --
 -------------------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ end multiplexer;
 --}} End of automatically maintained section
 
 architecture inv_input of multiplexer is
-
+-- internal signals
 signal in_a_wire : std_logic;
 signal in_b_wire : std_logic;
 signal out_wire : std_logic;

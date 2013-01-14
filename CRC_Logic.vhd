@@ -14,9 +14,9 @@
 --
 -------------------------------------------------------------------------------
 --
--- Description : This file defines a generic CRC calculator based on N flip flop
--- of type d. It accept a polinomial and creates the correct structure in order
--- to compute the CRC.
+-- Description : This file defines a generic CRC calculator based on N DFF. 
+-- It accepts a polynomial and creates the correct structure for the register
+-- in order to compute the CRC based on the given polynomial.
 --
 -------------------------------------------------------------------------------
 
@@ -31,13 +31,9 @@ entity CRC_logic is
 	generic(
 	-- number of bit of the polinomial
 		NUM_BITS_POLYNOMIAL : natural;
+		
 	-- its bits are LSB to MSB 
 		POLYNOMIAL_BITS : std_logic_vector(NUM_BITS_POLYNOMIAL-1 downto 0)
-		--Defining a generic as a function of another generic is not
-		--allowed.
-		--Defining a constant (i.e. MAX_ORDER_) is allowed only in the
-		--architecture, thus "64" is now hardcoded.
-		--POLINOMIAL : std_logic_vector(64-1 downto 0)
 	);
 	 port(
 		 D : in STD_LOGIC;
@@ -51,6 +47,7 @@ end CRC_logic;
 --}} End of automatically maintained section
 
 architecture str_CRC of CRC_logic is
+-- Flip Flop type D
 component ffd is
 	port(
 		 D : in STD_LOGIC;
@@ -80,13 +77,14 @@ begin
 -- Here we generate following structure:
 -- 			  ------		  ------
 -- Qk-1 ---->+ xor +-- Dk -->+ ffd +--- Qk --->  
--- 			 ---+--			 -+-+-
---       enable |		CLK	  | | RESET
---			----+			--+ +----
+-- 			 ---+--			 -+-+--
+--      		|			  | | 
+--	enable -----+		CLK	--+ +---- RESET
 -------------------------------------------------------------------------------	
 
 CREATE: for i in 1 to NUM_BITS_POLYNOMIAL - 1 generate
-	FIRST_CELL: if i = 1 generate  -- first cell
+	
+	FIRST_CELL: if i = 1 generate  
 		-- iff bit(POLINOMIAL) = '1' add a Xor cell in front of the FFD
 		FIRST_XOR: if (POLYNOMIAL_BITS(i-1)='1') generate
 			XE1: do_xor port map 

@@ -17,6 +17,8 @@
 -- Description : it implements the logic function
 --
 --			C = (A & E) ^ B
+-- Simply: if E = 0 then it behaves like a short circuit for B, else it does 
+-- A xor B (A ^ B)
 --
 -------------------------------------------------------------------------------
 

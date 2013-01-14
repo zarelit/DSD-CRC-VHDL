@@ -16,8 +16,9 @@
 --
 -- Description : Generic simple clock cycles counter that advises through the 
 -- port's Q signal when N cycles are passed and it remains active for 
----ACTIVE_TIME clock cycles. Signal U is used in order to control the xor
--- modules in the CRC_Logic module.
+-- ACTIVE_TIME clock cycles. Signal U is used in order to control the xor
+-- modules in the CRC_Logic module. The signal U's behaviour depends on the
+-- architecture.
 --
 -------------------------------------------------------------------------------
 
@@ -33,6 +34,7 @@ entity CRC_control is
 	-- how long the CRC logic must be enabled
 	-- after the last bit of data is received
 		ACTIVE_TIME : positive := 1);
+		
 	 port(
 	 	Clock : in STD_LOGIC;
 		Reset : in STD_LOGIC; -- active high
@@ -46,6 +48,7 @@ end CRC_control;
 
 --}} End of automatically maintained section
 
+-- in this architecture U remains active for ACTIVE_TIME when signal Q's high.
 architecture no_preload_behave of CRC_control is
 
 begin
@@ -82,6 +85,8 @@ begin
 
 end no_preload_behave;
 
+-- in this architecture U became active after Q and it remains active for
+-- ACTIVE_TIME cycles
 architecture preload_behave of CRC_control is
 
 -- internal signals

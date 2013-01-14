@@ -42,11 +42,7 @@ end md_sel;
 architecture behave_md_selector of md_sel is
 
 begin					
-	-- See documentation
-	-- in_a = MD
-	-- in_b = Qn
-	-- in_c = IN
-	-- in_d = U									 
+								 
 	output <= in_c and ((not in_b) or (in_a and in_d));
 
 end behave_md_selector;
