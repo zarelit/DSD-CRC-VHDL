@@ -57,7 +57,7 @@ component crc_module is
 end component crc_module;
 
 -- control constants
-constant TIMES : positive:= 100000;
+constant TIMES : positive:= 10000;
 constant CLK_PERIOD : time := 40 ns;
 constant NUM_BITS_READ : natural := 56;
 constant CRC_SIZE : natural := 8;
@@ -182,7 +182,7 @@ component crc_module is
 end component crc_module;
 
 -- control constants
-constant TIMES : positive:= 1000;
+constant TIMES : positive:= 10000;
 constant CLK_PERIOD : time := 40 ns;
 constant NUM_BITS_READ : natural := 56;
 constant CRC_SIZE : natural := 8;
@@ -311,7 +311,7 @@ component crc_module is
 end component crc_module;
 
 -- control constants
-constant TIMES : positive:= 1000;
+constant TIMES : positive:= 10000;
 constant CLK_PERIOD : time := 40 ns;
 constant NUM_BITS_READ : natural := 64;
 constant CRC_SIZE : natural := 8;
@@ -428,7 +428,7 @@ component crc_module is
 end component crc_module;
 
 -- control constants
-constant TIMES : positive:= 1000;
+constant TIMES : positive:= 10000;
 constant CLK_PERIOD : time := 40 ns;
 constant NUM_BITS_READ : natural := 64;
 constant CRC_SIZE : natural := 8;

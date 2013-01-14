@@ -100,7 +100,6 @@ Q_SIGNAL : process (Clock, Reset)
 	begin
 		if Reset = '0' then
 			Qint <= '0';
-			U <= '1';
 			counter := 0;
 			
 		elsif rising_edge(Clock) then
