@@ -14,8 +14,8 @@
 --
 -------------------------------------------------------------------------------
 --
--- Description : It defines the entity and the different architecture for a
--- CRC hardware module.
+-- Description : It defines the interface and the architecture used for CRC 
+-- module
 --
 -------------------------------------------------------------------------------
 
@@ -31,9 +31,11 @@ entity crc_module is
 		 md : in STD_LOGIC;
 		 line_in : in STD_LOGIC;
 		 clock : in STD_LOGIC;
-		 reset : in STD_LOGIC;
+		 reset : in STD_LOGIC; --active low
 		 line_out : out STD_LOGIC;
-		 busy : out std_logic --active low
+		 -- it indicates when the module ignores input in order to calculate
+		 -- the Cyclic Redundancy Code
+		 busy : out std_logic 
 	     );
 end crc_module;
 
@@ -41,6 +43,7 @@ end crc_module;
 
 architecture no_preload of crc_module is
 
+-- enables the input to the shift register and the CRC_Logic
 component md_sel is
 	 port(
 		 in_a : in STD_LOGIC;
@@ -51,6 +54,7 @@ component md_sel is
 	     );
 end component;
 
+-- computes CRC
 component CRC_logic is
 	generic(
 		NUM_BITS_POLYNOMIAL : natural;
@@ -66,18 +70,26 @@ component CRC_logic is
 		 
 end component;
 
+-- Control different things :
+-- -> output of the multiplexer;
+-- -> input of shift register and CRC_Logic through md_sel
+-- -> enable/disable Xor logic in CRC_Logic;
+-- N = number of periods before it resets itself
+-- ACTIVE_TIME = number of periods signals must be active
+-- Q and U have different behaviour dependant on architecture chosen by the user
 component CRC_control is
 	generic (N : positive := 1;
 		ACTIVE_TIME : positive := 1);
 	port (
 	 	Clock : in STD_LOGIC;
 		Reset : in STD_LOGIC; -- active high
-		-- qontrol signal
+		-- qontrol signals
 		Q : out STD_LOGIC := '0';
 		U : out STD_LOGIC := '0'
 	);
 end component;
 
+-- stages = number of FFD in the shift register
 component shift_reg is
 	generic (N:integer := 4);
 	port( d          : in  std_logic;
@@ -102,7 +114,7 @@ signal md_sel_out : std_logic;
 signal crc_ctrl_out : std_logic;
 signal crc_enable : std_logic;
 signal crc_enable_n : std_logic;
-signal ffd_q : std_logic;
+signal ffd_q : std_logic; -- exits of the last ffd of the shift_reg
 signal crc_logic_out : std_logic;
 
 -- for input signals
@@ -164,8 +176,6 @@ begin
 			NUM_BITS_POLYNOMIAL => 9,
 			-- MSB to LSB (100010101, 0x115)
 			 POLYNOMIAL_BITS => (8=>'1',4=>'1',2=>'1',0=>'1',others=>'0')
-			-- LSB to MSB (101010001)
-			--POLINOMIAL => (8=>'1',6=>'1',4=>'1',0=>'1', others=>'0')
 			)
 		port map (
 			md_sel_out,
@@ -175,7 +185,7 @@ begin
 			crc_logic_out);
 	
 	-- it controls the data flow, from message received to crc computed and sent
-	-- throug output signals
+	-- through output signals
 	CRC_CTRL_LG : crc_control
 		generic map(
 			N => 56,

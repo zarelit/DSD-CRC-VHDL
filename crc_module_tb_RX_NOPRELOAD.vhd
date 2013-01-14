@@ -18,16 +18,16 @@
 --
 -------------------------------------------------------------------------------
 
-library crc;
-use crc.all;
+library crcmd;
+use CRCmd.all;
 
 configuration crc_module_tb_RX_NOPRELOAD of crc_module_tb is
 for rx_no_preload
 	for TRANSMITTER : crc_module 
-		use entity crc.crc_module (no_preload);
+		use entity CRCmd.crc_module (no_preload);
 		for no_preload
 			for CRC_CTRL_LG : CRC_control 
-				use entity crc.CRC_control (no_preload_behave);
+				use entity CRCmd.CRC_control (no_preload_behave);
 			end for;
 		end for;
 	end for;
