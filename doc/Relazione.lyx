@@ -65,10 +65,14 @@
 \begin_body
 
 \begin_layout Title
+
+\family roman
 Implementazione di un modulo CRC mittente/destinatario in VHDL
 \end_layout
 
 \begin_layout Subtitle
+
+\family roman
 Esame di Digital Systems Design
 \end_layout
 
@@ -84,6 +88,8 @@ David Costa, Giuliano Peraz
 \end_layout
 
 \begin_layout Section*
+
+\family roman
 Cos'è il CRC
 \end_layout
 
@@ -122,6 +128,8 @@ L’algoritmo prevede la definizione di un polinomio di ordine F che sarà
 \end_layout
 
 \begin_layout Section*
+
+\family roman
 Come si calcola il CRC
 \end_layout
 
@@ -146,6 +154,8 @@ Al termine della trasmissione della stringa di bit lunga M+F bit il destinatario
 \end_layout
 
 \begin_layout Section*
+
+\family roman
 Implementazione
 \end_layout
 
@@ -296,6 +306,8 @@ Schema a blocchi di CRC_Module
 \end_layout
 
 \begin_layout Subsection*
+
+\family roman
 Descrizione dei blocchi
 \end_layout
 
@@ -336,6 +348,8 @@ I blocchi SHIFT_REGISTER, CRC_LOGIC e CRC_CONTROLLER hanno parametri generici
 \end_layout
 
 \begin_layout Subsection*
+
+\family roman
 Criteri utilizzati nella progettazione
 \end_layout
 
@@ -380,10 +394,14 @@ manutenzione: il codice VHDL è stato scritto per essere il più chiaro possibil
 \end_layout
 
 \begin_layout Section*
+
+\family roman
 Implementazione dei blocchi
 \end_layout
 
 \begin_layout Subsection*
+
+\family roman
 SHIFT_REGISTER
 \end_layout
 
@@ -435,6 +453,8 @@ Struttura di uno shift-register
 \end_layout
 
 \begin_layout Subsection*
+
+\family roman
 CRC_LOGIC
 \end_layout
 
@@ -449,7 +469,7 @@ status open
 \align center
 \begin_inset Graphics
 	filename Images/CRC_Logic.png
-	width 70text%
+	width 100text%
 
 \end_inset
 
@@ -855,6 +875,8 @@ Nel nostro caso il modulo implementa la divisione polinomiale tra il messaggio
 \end_layout
 
 \begin_layout Subsection*
+
+\family roman
 CRC_CONTROLLER
 \end_layout
 
@@ -1086,6 +1108,8 @@ Nel nostro modulo sono stati utilizzati questi segnali per poter temporizzare
 \end_layout
 
 \begin_layout Subsection*
+
+\family roman
 MULTIPLEXER 
 \end_layout
 
@@ -1096,6 +1120,8 @@ Scopo del multiplexer è mandare all'output la copia dei bit del messaggio
 \end_layout
 
 \begin_layout Subsection*
+
+\family roman
 MD_ENABLE
 \end_layout
 
@@ -1438,6 +1464,8 @@ e il calcolo del CRC.
 \end_layout
 
 \begin_layout Section*
+
+\family roman
 Testing del modulo
 \end_layout
 
@@ -1532,12 +1560,10 @@ Testbench in esecuzione su Active-HDL® con architettura no_preload
 
 \end_layout
 
-\begin_layout Standard
-
-\end_layout
-
 \begin_layout Section*
 \start_of_appendix
+
+\family roman
 \begin_inset External
 	template PDFPages
 	filename CRC_specifiche.pdf
