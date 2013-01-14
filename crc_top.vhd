@@ -100,7 +100,6 @@ end component;
 -- internal signals
 signal md_sel_out : std_logic;
 signal crc_ctrl_out : std_logic;
-signal crc_ctrl_out_n : std_logic;
 signal crc_enable : std_logic;
 signal crc_enable_n : std_logic;
 signal ffd_q : std_logic;
@@ -130,14 +129,13 @@ begin
 	busy_wire <= crc_ctrl_out;
 
 -- internal signals
-	crc_ctrl_out_n <= not crc_ctrl_out;
 	crc_enable_n <= not crc_enable;
 	
 -- it selects the correct behaviour of the module
 	MD_S : md_sel 
 		port map (
 			md_wire,
-			crc_ctrl_out_n,
+			crc_ctrl_out,
 			line_in,
 			crc_enable,
 			md_sel_out);
