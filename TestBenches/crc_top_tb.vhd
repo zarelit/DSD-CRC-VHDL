@@ -57,7 +57,7 @@ component crc_module is
 end component crc_module;
 
 -- control constants
-constant TIMES : positive:= 1000;
+constant TIMES : positive:= 100000;
 constant CLK_PERIOD : time := 40 ns;
 constant NUM_BITS_READ : natural := 56;
 constant CRC_SIZE : natural := 8;
@@ -270,7 +270,7 @@ begin
 	if( falling_edge(reset_signal) or out_data_vec'event ) then
 		index := 0;
 		expected_output_bit <= out_data_vec(index);
-	elsif (clock_signal'event and clock_signal='1') then
+	elsif (rising_edge(clock_signal)) then
 	    index := (index+1) mod (NUM_BITS_READ + CRC_SIZE + CRC_SIZE);
 		if( index >= NUM_BITS_READ+CRC_SIZE ) then
 			expected_output_bit <= '0';

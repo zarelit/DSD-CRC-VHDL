@@ -6,39 +6,63 @@
     </comment>
     <databases>
         <database id="">*virtual*</database>
-        <database id="08002785937058C9EE505E342E001500">wave.asdb</database>
+        <database id="080027859370E145F45045A0E4010C00">TX_nopreload.asdb</database>
     </databases>
     <signallists>
         <signallist id="0">
-                AAAAEwABwAAAAAAQAQMBPwMBA8AAKAAAEBEAAAAA
+                AAAAFAACwAAAAAAQAQN9ezlDfTAAg5UAABARAAAA
 |
         </signallist>
     </signallists>
     <propertybases>
         <propertybase id="0">
             <propclass name="radix">
-                <property first="268435460" last="268435515">
-                2
-                </property>
             </propclass>
             <propclass name="mode">
             </propclass>
             <propclass name="notation">
-                <property first="268435459" last="268435459">
+                <property first="268435460" last="268435460">
+                1
+                </property>
+                <property first="268435517" last="268435517">
                 1
                 </property>
             </propclass>
             <propclass name="reverse">
             </propclass>
             <propclass name="bold">
+                <property first="268435584" last="268435584">
+                1
+                </property>
             </propclass>
             <propclass name="row_height">
             </propclass>
             <propclass name="color">
+                <property first="268435458" last="268435458">
+                #00c0c0
+                </property>
+                <property first="268435460" last="268435460">
+                #9ccf00
+                </property>
+                <property first="268435517" last="268435517">
+                #9ccf00
+                </property>
+                <property first="268435584" last="268435584">
+                #ff0400
+                </property>
             </propclass>
             <propclass name="compared">
             </propclass>
             <propclass name="analog_bounds">
+                <property first="268435458" last="268435459">
+                [-1,1]
+                </property>
+                <property first="268435582" last="268435582">
+                [-1,1]
+                </property>
+                <property first="268435584" last="268435584">
+                [-1,1]
+                </property>
             </propclass>
             <propclass name="fixedpoint">
             </propclass>
@@ -48,8 +72,8 @@
     </propertybases>
     <prefbases>
         <prefbase id="0" >
-            <pref name="End Time" value="12363288" />
-            <pref name="Start Time" value="0" />
+            <pref name="End Time" value="15216408" />
+            <pref name="Start Time" value="9366859" />
         </prefbase>
     </prefbases>
     <bookmarkbases>
@@ -58,7 +82,7 @@
     </bookmarkbases>
     <cursorbases>
         <cursors id="0">
-            <cursor value="507777" label="Cursor 1" locked="0" />
+            <cursor value="10944652" label="Cursor 1" locked="0" />
         </cursors>
     </cursorbases>
     <measurementbases>

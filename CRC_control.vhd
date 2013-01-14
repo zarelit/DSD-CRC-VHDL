@@ -42,7 +42,7 @@ entity CRC_control is
 		-- Q clears the inputs
 		-- U enables the XORing
 		Q : out STD_LOGIC := '0';
-		U : out STD_LOGIC := '0' -- active low
+		U : out STD_LOGIC := '1' -- active low
 	     );
 end CRC_control;
 
@@ -100,6 +100,7 @@ Q_SIGNAL : process (Clock, Reset)
 	begin
 		if Reset = '0' then
 			Qint <= '0';
+			U <= '1';
 			counter := 0;
 			
 		elsif rising_edge(Clock) then
