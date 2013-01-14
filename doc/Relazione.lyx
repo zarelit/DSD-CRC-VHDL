@@ -1,0 +1,493 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass scrartcl
+\use_default_options true
+\maintain_unincluded_children false
+\language italian
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family rmdefault
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Implementazione di un modulo CRC mittente/destinatario in VHDL
+\end_layout
+
+\begin_layout Subtitle
+Esame di Digital Systems Design
+\end_layout
+
+\begin_layout Author
+David Costa, Giuliano Peraz
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Cos'è il CRC
+\end_layout
+
+\begin_layout Standard
+CRC (Cyclic Redundancy Code/Check) è un algoritmo di rilevazione degli errori
+ utilizzato spesso nelle trasmissioni dati quali USB, ATM, GSM.
+\end_layout
+
+\begin_layout Standard
+Il funzionamento si basa sull’invio di un messaggio di M bit ai quali seguono
+ F bit di ridondanza che contengono il codice CRC.
+\end_layout
+
+\begin_layout Standard
+Il messaggio binario è considerato come un polinomio di ordine M-1 in cui
+ ogni bit rappresenta un coefficiente della somma di potenze, ad esempio:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $1\,0000\,1010=1\cdot x^{8}+0\cdot x^{7}+0\cdot x^{6}+\cdots+1\cdot x^{3}+0\cdot x^{2}+1\cdot x^{1}+0\cdot x^{0}=x^{8}+x^{3}+x$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+L’algoritmo prevede la definizione di un polinomio di ordine F che sarà
+ usato per calcolare il codice CRC da spedire, oppure per verificare l'integrità
+ del dato ricevuto, per tale ragione il polinomio divisore deve essere noto
+ sia al mittente che al destinatario.
+ L'efficacia nella rivelazione degli errori dipende fortemente dal polimonio
+ divisore (che deve possedere alcune caratteristiche matematiche particolari)
+ per questa ragione ne esistono già alcuni standard di comprovata efficacia.
+ Una lista esaustiva di tali codici si può reperire sul sito su Wikipedia
+ inglese alla voce Cyclic Redundancy Check.
+\end_layout
+
+\begin_layout Section*
+Come si calcola il CRC
+\end_layout
+
+\begin_layout Standard
+Il calcolo del CRC non è altro che una divisione polinomiale tra il messaggio
+ e polinomio divisore.
+ Al termine della divisione si avranno risultato e resto, si scarta il risultato
+ e si salva il resto della divisione negli F bit del codice.
+ Gli F bit saranno poi inseriti in coda agli M bit del messaggio per ottenere
+ l’intera stringa da inviare.
+\end_layout
+
+\begin_layout Standard
+[FIGURA: schema ricevitore_trasmettitore]
+\end_layout
+
+\begin_layout Standard
+Al termine della trasmissione della stringa di bit lunga M+F bit il destinatario
+ potrà verificare la correttezza dividendo ciò che ha ricevuto per lo stesso
+ polinomio divisore del mittente, se il resto è nullo allora il messaggio
+ trasmesso è stato ricevuto correttamente.
+\end_layout
+
+\begin_layout Section*
+Implementazione
+\end_layout
+
+\begin_layout Standard
+Noi abbiamo implementato un modulo CRC mittente/destinatario sincrono, cioè
+ un componente hardware capace di funzionare sia come mittente di una stringa
+ di bit formata da messaggio + CRC sia come destinatario in grado di verificare
+ se la stringa è giunta a destinazione senza alcun errore.
+ Le specifiche fornite impongono M=56 bit e F=8 bit per un totale T=64 bit
+ di messaggio da trasmettere o da ricevere.
+ 
+\end_layout
+
+\begin_layout Standard
+Il comportamento del modulo è il seguente:
+\end_layout
+
+\begin_layout Itemize
+mittente: riceve in input una sequenza di 56 bit che inizia a trasmettere
+ dopo 8 cicli di clock e durante la ricezione del messaggio è calcolato
+ il CRC da inserire in coda al messaggio di output;
+\end_layout
+
+\begin_layout Itemize
+destinatario: riceve in ingresso un messaggio di 64 bit del quale deve calcolare
+ il CRC.
+ In output è replicato il messaggio ricevuto in ingresso ma gli ultimi 8
+ bit segnalano l’effettiva correttezza del messaggio ricevuto.
+ 
+\end_layout
+
+\begin_layout Standard
+Noi abbiamo impostato che gli ultimi 8 bit siano uguali a 0 se il messaggio
+ ricevuto è corretto, questo per poter sfruttare la capacità di rivelazione
+ dell’errore da parte dell’algoritmo CRC senza dover aggiungere ulteriori
+ moduli che potessero complicare il design.
+\end_layout
+
+\begin_layout Standard
+Il chip ha la seguente interfaccia:
+\end_layout
+
+\begin_layout Standard
+[Immagine di layout esterno di CRC_top]
+\end_layout
+
+\begin_layout Standard
+Descrizione dei segnali:
+\end_layout
+
+\begin_layout Itemize
+md : indica al chip se funzionare come mittente o come destinatario (0 =
+ mittente, 1 = destinatario);
+\end_layout
+
+\begin_layout Itemize
+line_in : linea seriale in ingresso, da questa vengono trasmessi/ricevuti
+ i bit;
+\end_layout
+
+\begin_layout Itemize
+clock : temporizzatore per sincronizzazione del circuito e della logica
+ interna;
+\end_layout
+
+\begin_layout Itemize
+reset : per ripristinare il circuito e portarlo in uno stato conosciuto;
+\end_layout
+
+\begin_layout Itemize
+line_out : output seriale dal quale escono i 64 bit (56 messaggio + 8 CRC
+ se mittente, 56 + 8 di verifica se destinatario); 
+\end_layout
+
+\begin_layout Itemize
+busy : indica quando il circuito non accetta input.
+\end_layout
+
+\begin_layout Standard
+La descrizione del circuito è la seguente:
+\end_layout
+
+\begin_layout Standard
+[immagine del diagramma a blocchi]
+\end_layout
+
+\begin_layout Subsection*
+Descrizione dei blocchi
+\end_layout
+
+\begin_layout Itemize
+SHIFT_REGISTER: serve principalmente per sincronizzare l’uscita e per ritardare
+ di 8 cicli di clock l’invio del messaggio in modo da calcolare il codice
+ CRC e spedire tutti i 56 + 8 bit contiguamente, sia che il modulo sia impostato
+ come mittente sia come destinatario.
+\end_layout
+
+\begin_layout Itemize
+CRC_LOGIC: è uno shift register con la possibilità di abilitare la funzione
+ di calcolo del CRC mediante il segnale enable_crc;
+\end_layout
+
+\begin_layout Itemize
+CRC_CONTROLLER: abilita il calcolo del codice CRC e controlla quale siano
+ i bit da spedire su line_out;
+\end_layout
+
+\begin_layout Itemize
+MULTIPLEXER: multiplexa l’uscita tra lo SHIFT_REGISTER e CRC_LOGIC in modo
+ da inviare prima tutti i 56 bit del messaggio ricevuto e poi gli 8 bit
+ di CRC/codice di rilevazione errori contenuti nel CRC_LOGIC;
+\end_layout
+
+\begin_layout Itemize
+MD_ENABLE: imposta il comportamento della logica come mittente o come destinatar
+io, disabilita la propagazione del segnale di CRC_CONTROLLER alla CRC_LOGIC
+ per continuare a calcolare il CRC nel caso il modulo fosse impostato come
+ destinatario.
+\end_layout
+
+\begin_layout Standard
+I blocchi SHIFT_REGISTER, CRC_LOGIC e CRC_CONTROLLER hanno parametri generici
+ in modo da essere riutilizzabili per calcolare diversi polinomi o per essere
+ utilizzati in progetti successivi.
+\end_layout
+
+\begin_layout Subsection*
+Criteri utilizzati nella progettazione
+\end_layout
+
+\begin_layout Standard
+Il design scelto è stato implementato tenendo in considerazione le seguenti
+ metriche per la realizzazione del modulo hardware:
+\end_layout
+
+\begin_layout Itemize
+prestazioni: invece di salvare tutto il messaggio in una memoria, calcolare
+ il CRC, salvare quest’ultimo e poi inviare tutti i T bit, il nostro modulo
+ impiega un numero pari a F cicli di clock prima di inviare l’intero messaggio,
+ cioè quelli strettamente necessari a CRC_LOGIC per il calcolo del codice
+ senza perdere tempo;
+\end_layout
+
+\begin_layout Itemize
+robustezza: ogni modulo è stato realizzato pensando e testando i casi in
+ cui si potrebbe avere un input indesiderato o che possa portare a output
+ non definiti, a tal proposito è stato sviluppato una semplice procedura
+ di controllo tra output fornito dal nostro modulo e output atteso;
+\end_layout
+
+\begin_layout Itemize
+occupazione di area: gli elementi sono stati pensati e implementati avendo
+ in mente la minore occupazione di area possibile per il chip anche grazie
+ a un design che permette il riutilizzo dei moduli per fungere sia da logica
+ di calcolo, sia da celle di memoria e scegliendo componenti che occupano
+ il minore spazio possibile ma che permettano di far funzionare correttamente
+ il modulo;
+\end_layout
+
+\begin_layout Itemize
+Riusabilità del codice: sono stati creati moduli generici quali il CRC_LOGIC
+ e il CRC_CONTROLLER che possono essere usati per altri progetti, il polinomio
+ divisore e la sua lunghezza sono configurabili;
+\end_layout
+
+\begin_layout Itemize
+manutenzione: il codice VHDL è stato scritto per essere il più chiaro possibile
+ in modo che chiunque possa essere in grado di leggerlo senza difficoltà.
+\end_layout
+
+\begin_layout Section*
+Implementazione dei blocchi
+\end_layout
+
+\begin_layout Subsection*
+SHIFT_REGISTER
+\end_layout
+
+\begin_layout Standard
+È stato scelto uno shift register perché permette di temporizzare l’uscita
+ con il clock e perché è stato necessario inserire un ritardo di F cicli
+ di clock per il calcolo del CRC.
+ In generale il modulo deve aspettare un numero di cicli di clock pari al
+ numero di flip flop che compongono il CRC_LOGIC.
+\end_layout
+
+\begin_layout Subsection*
+CRC_LOGIC
+\end_layout
+
+\begin_layout Standard
+Il modulo che implementa la logica non è che uno shift register con la possibili
+tà di inserire le celle DO_XOR tra un flip flop e l’altro in modo da poter
+ configurare il modulo perché possa calcolare polinomi differenti da quello
+ fornito nelle specifiche.
+\end_layout
+
+\begin_layout Standard
+È possibile abilitare le celle DO_XOR tramite il segnale enable_crc, in
+ questo modo anziché utilizzare due shift register, uno adibito al calcolo
+ del CRC e uno al suo salvataggio, si ottimizza il componente utilizzando
+ un solo shift register per svolgere entrambe le funzioni.
+\end_layout
+
+\begin_layout Standard
+Nel nostro caso il modulo implementa la divisione polinomiale tra il messaggio
+ in input e il polinomio dato dalle specifiche (
+\begin_inset Formula $x^{8}+x^{4}+x^{2}+1$
+\end_inset
+
+).
+ All’inizio della ricezione del messaggio il modulo è resettato in modo
+ da eliminare elementi di disturbo che potrebbero essere presenti nelle
+ celle di memoria.
+ Questo comportamento è stato introdotto per motivi di robustezza.
+\end_layout
+
+\begin_layout Subsection*
+CRC_CONTROLLER
+\end_layout
+
+\begin_layout Standard
+È un contatore generico che conta i cicli di clock e fornisce in output
+ due uscite che rimangono attive per un numero di cicli di clock configurabile.
+ 
+\end_layout
+
+\begin_layout Standard
+Per questo modulo abbiamo provveduto all’implementazione di due architetture
+ per avere due comportamenti diversi a seconda delle necessità dell’utente:
+\end_layout
+
+\begin_layout Enumerate
+Architettura NO_PRELOAD:
+\begin_inset Newline newline
+\end_inset
+
+Tra due invii di messaggio + CRC è presente un byte nullo in modo che un
+ ricevente possa riconoscere quando iniziano i messaggi.
+ Questo è stato pensato per l’utilizzo di un ricevitore che non si aspetta
+ una trasmissione continua dei messaggi.
+\begin_inset Newline newline
+\end_inset
+
+Nel funzionamento da destinatario il modulo invia comunque il byte nullo
+ per separare i messaggi, questo implica che se il messaggio è corretto
+ si avranno un totale di 16 bit posti a zero (8 a zero per segnalare il
+ corretto ricevimento del messaggio e 8 bit di separazione tra i messaggi).
+\begin_inset Newline newline
+\end_inset
+
+In questa architettura l’uscita Q rimane attiva per un numero di cicli di
+ clock doppio rispetto a U per aggiungere il byte nullo al termine dell’invio
+ del messaggio.
+\begin_inset Newline newline
+\end_inset
+
+Con questa architettura inoltre i messaggi non si sovrappongono mai nel
+ tempo, i bit in uscita sono sempre riferiti all'ultimo dato posto all'ingresso;
+ pertanto l'utilizzatore deve avere memoria sufficiente per lavorare su
+ un solo messaggio.
+\end_layout
+
+\begin_layout Enumerate
+Architettura PRELOAD:
+\begin_inset Newline newline
+\end_inset
+
+non ci sono separazioni tra i messaggi inviati in modo da velocizzare la
+ spedizione creando un bit stream continuo.
+ 
+\begin_inset Newline newline
+\end_inset
+
+Le uscite si attivano una dopo l’altra, prima Q poi U per il numero di clock
+ impostato durante la compilazione del modulo.
+\begin_inset Newline newline
+\end_inset
+
+Questa architettura è stata pensata per l’utilizzo del modulo in dispositivi
+ con ricevitore avente clock sincrono rispetto al trasmettitore.
+\end_layout
+
+\begin_layout Standard
+I segnali di uscita del modulo determinano:
+\end_layout
+
+\begin_layout Itemize
+quando si commuta l’uscita tra input e uscita del CRC_LOGIC;
+\end_layout
+
+\begin_layout Itemize
+quando si ignora l’input perché è in corso la trasmissione degli F bit del
+ CRC;
+\end_layout
+
+\begin_layout Itemize
+quando si disabilita la logica DO_XOR di CRC_LOGIC per inviare i bit del
+ codice.
+\end_layout
+
+\begin_layout Standard
+Nel nostro modulo sono stati utilizzati questi segnali per poter temporizzare
+ l’invio del messaggio, il calcolo del CRC e l’invio del CRC.
+ In pratica i moduli DO_XOR del CRC Logic devono essere spenti per 8 cicli
+ in modo da inviare il CRC contiguamente al messaggio in uscita.
+\end_layout
+
+\begin_layout Subsection*
+MULTIPLEXER 
+\end_layout
+
+\begin_layout Standard
+[DIAGRAMMA DEL MULTIPLEXER] Scopo del multiplexer è mandare all'output la
+ copia dei bit del messaggio oppure l'esito del calcolo del CRC al tempo
+ oppurtuno, per questo il suo segnale di controllo è crc_enable negato.
+\end_layout
+
+\begin_layout Subsection*
+MD_ENABLE
+\end_layout
+
+\begin_layout Standard
+[DIAGRAMMA LOGICA MD_ENABLE][TRUTH TABLE DEL MODULO]
+\end_layout
+
+\begin_layout Standard
+MD_ENABLE ha lo scopo di ignorare l'input del modulo quando questo può corromper
+e il calcolo del CRC.
+ Questa scelta non obbliga così l'utente a inserire necessariamente degli
+ zeri quando il modulo ha la segnalazione “busy” attiva, rendendolo così
+ più robusto.
+\begin_inset Newpage pagebreak
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part*
+\start_of_appendix
+Appendice A: specifiche del progetto
+\end_layout
+
+\begin_layout Standard
+asdlol
+\end_layout
+
+\end_body
+\end_document
