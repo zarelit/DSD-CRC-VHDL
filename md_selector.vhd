@@ -16,7 +16,7 @@
 --
 -- Description : it implements the logic function 
 --					
---					output = (in_a | in_b) & in_c
+--					output = ((in_a & in_d) | !in_b) & in_c
 --
 -------------------------------------------------------------------------------
 
@@ -47,6 +47,6 @@ begin
 	-- in_b = Qn
 	-- in_c = IN
 	-- in_d = U									 
-	output <= in_c and (in_b or (in_a and in_d));
+	output <= in_c and ((not in_b) or (in_a and in_d));
 
 end behave_md_selector;

@@ -8,3 +8,4 @@
   { "name": "Line_OUT", "wave" : "...............5.|.....................3...............5....." , "data":["Message N", "Check Correctness","Message N+1"]},
 ], 
 "config" : {"hscale" : 0.5}
+}
